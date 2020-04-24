@@ -1,0 +1,24 @@
+{
+    "entities": [
+        {
+            "id": "test",
+            "components": [
+                {
+                    "id": "TestComponent",
+                    "fields": [
+                        {
+                            "id": "randomInteger",
+                            "value": 6,
+                            "type": "System.Int32"
+                        },
+                        {
+                            "id": "randomString",
+                            "value": "MonkeyButt",
+                            "type": "System.String"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
