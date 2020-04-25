@@ -1,14 +1,13 @@
-using System.IO;
 using CardboardCore.Loop;
 using CardboardCore.DI;
-using Newtonsoft.Json;
-using UnityEngine;
+using CardboardCore.Utilities;
 
 namespace CardboardCore.EntityComponents
 {
     public class EntityFactory<T> where T : IEntityLoadData
     {
         [Inject] private UpdateLoop updateLoop;
+        [Inject] private EntityCollectionLoader entityCollectionLoader;
 
         private EntityDataCollection entityDataCollection;
 
@@ -24,10 +23,7 @@ namespace CardboardCore.EntityComponents
 
         protected void Initialize(T entityLoadData)
         {
-            string path = Application.dataPath + entityLoadData.Path;
-            string entityJson = File.ReadAllText(path);
-
-            entityDataCollection = JsonConvert.DeserializeObject<EntityDataCollection>(entityJson);
+            entityDataCollection = entityCollectionLoader.Load(entityLoadData);
         }
 
         public Entity Instantiate(string id)

@@ -7,6 +7,15 @@ namespace CardboardCore.Utilities
 {
     public static class Reflection
     {
+
+        public static Type[] FindDerivedTypes<T>()
+        {
+            Type baseType = typeof(T);
+            Assembly assembly = baseType.Assembly;
+
+            return assembly.GetTypes().Where(t => t != baseType && baseType.IsAssignableFrom(t)).ToArray();
+        }
+
         public static Type[] GetTypes<T>()
         {
             Type type = typeof(T);

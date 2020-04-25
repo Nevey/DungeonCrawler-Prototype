@@ -4,7 +4,7 @@ namespace CardboardCore.EntityComponents
 {
     public class EntityDataCollection
     {
-        public EntityData[] entities { private get; set; }
+        public EntityData[] entities { get; set; }
 
         public EntityData GetEntityWithId(string id)
         {

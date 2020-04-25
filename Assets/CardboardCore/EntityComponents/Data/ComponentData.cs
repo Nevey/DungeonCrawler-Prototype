@@ -7,6 +7,11 @@ namespace CardboardCore.EntityComponents
         public string id { get; set; }
         public FieldData[] fields { get; set; }
 
+        public ComponentData()
+        {
+            fields = new FieldData[0];
+        }
+
         public FieldData GetFieldDataWithId(string fieldId)
         {
             for (int i = 0; i < fields.Length; i++)

@@ -6,5 +6,10 @@ namespace CardboardCore.EntityComponents
     {
         public string id { get; set; }
         public ComponentData[] components { get; set; }
+
+        public EntityData()
+        {
+            components = new ComponentData[0];
+        }
     }
 }

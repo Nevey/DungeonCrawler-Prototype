@@ -24,7 +24,7 @@ namespace CardboardCore.EntityComponents
 
                 for (int k = 0; k < fieldInfos.Length; k++)
                 {
-                    FieldInfo fieldInfo = fieldInfos[i];
+                    FieldInfo fieldInfo = fieldInfos[k];
 
                     FieldData fieldData = componentData.GetFieldDataWithId(fieldInfo.Name);
 
