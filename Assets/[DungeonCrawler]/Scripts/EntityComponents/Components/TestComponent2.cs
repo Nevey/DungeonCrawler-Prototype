@@ -3,16 +3,13 @@ using CardboardCore.Utilities;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
-    public class TestComponent : Component
+    public class TestComponent2 : Component
     {
-        [TweakableField] private int randomInteger;
-
-        [TweakableField] private string randomString;
+        [TweakableField] private bool randomBoolean;
 
         protected override void OnStart()
         {
-            Log.Write(randomInteger);
-            Log.Write(randomString);
+            Log.Write(randomBoolean);
         }
 
         protected override void OnUpdate(double deltaTime)
