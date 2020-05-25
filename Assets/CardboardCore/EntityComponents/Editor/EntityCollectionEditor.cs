@@ -52,7 +52,7 @@ namespace CardboardCore.EntityComponents
         private IEntityLoadData entityLoadData;
         private int selectedIndex;
 
-        [MenuItem("DungeonCrawler-Prototype/EntityCollection")]
+        [MenuItem("EntityCollection/Editor")]
         private static void ShowWindow()
         {
             EntityCollectionEditor window = GetWindow<EntityCollectionEditor>();
@@ -64,8 +64,8 @@ namespace CardboardCore.EntityComponents
         {
             Injector.Inject(this);
 
-            // TODO: Fing all IEntityLoadData and pick one
-            entityLoadData = new GameEntityConfiguration();
+            // TODO: Find all IEntityLoadData and pick one
+            entityLoadData = new GameEntityLoadData();
 
             entityDataCollection = entityCollectionLoader.Load(entityLoadData);
         }

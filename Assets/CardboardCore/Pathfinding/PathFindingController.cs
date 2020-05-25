@@ -14,12 +14,12 @@ namespace CardboardCore.PathFinding
 
         private Dictionary<Node, Node?> MapBreadcrumbs(Node startNode, Node endNode)
         {
-            Dictionary<Node, Node?> visitedDictionary = new Dictionary<Node, Node?> {[startNode] = null};
+            Dictionary<Node, Node?> visitedDictionary = new Dictionary<Node, Node?> { [startNode] = null };
 
             for (int i = 0; i < visitedDictionary.Count; i++)
             {
                 Node node = visitedDictionary.Keys.ElementAt(i);
-                
+
                 foreach (Node surroundingNode in GetSurroundingTilesHexGrid(node))
                 {
                     if (visitedDictionary.ContainsKey(surroundingNode))
@@ -137,15 +137,15 @@ namespace CardboardCore.PathFinding
         {
             Node startNode = new Node(from, 0);
             Node endNode = new Node(to, 0);
-            
+
             Dictionary<Node, Node?> breadcrumbs = MapBreadcrumbs(startNode, endNode);
-            
-            List<Node> path = new List<Node> {endNode};
+
+            List<Node> path = new List<Node> { endNode };
 
             while (!path.Contains(startNode))
             {
                 Node node = path[path.Count - 1];
-                
+
                 if (!breadcrumbs.ContainsKey(node))
                 {
                     throw Log.Exception($"Node with <b>Coords X: {node.x}, Y: {node.y}</b> not available!");
@@ -158,7 +158,7 @@ namespace CardboardCore.PathFinding
                 {
                     break;
                 }
-                
+
                 path.Add(fromNode.Value);
             }
 

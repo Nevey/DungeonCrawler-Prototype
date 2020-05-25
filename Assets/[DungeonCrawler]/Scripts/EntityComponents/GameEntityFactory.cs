@@ -4,11 +4,11 @@ using CardboardCore.DI;
 namespace DungeonCrawler.EntityComponents
 {
     [Injectable]
-    public class GameEntityFactory : EntityFactory<GameEntityConfiguration>
+    public class GameEntityFactory : EntityFactory<GameEntityLoadData>
     {
         public GameEntityFactory()
         {
-            Initialize(new GameEntityConfiguration());
+            Initialize(new GameEntityLoadData());
         }
     }
 }
