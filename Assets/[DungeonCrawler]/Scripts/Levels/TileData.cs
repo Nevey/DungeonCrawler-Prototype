@@ -6,10 +6,10 @@ namespace DungeonCrawler.Levels
         UnWalkable
     }
 
-    public class Tile
+    public class TileData
     {
-        private int x;
-        private int y;
-        private WalkableState walkableState;
+        public int x;
+        public int y;
+        public WalkableState walkableState;
     }
 }

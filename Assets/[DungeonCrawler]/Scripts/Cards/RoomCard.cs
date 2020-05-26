@@ -4,9 +4,9 @@ namespace DungeonCrawler.Cards
 {
     public class RoomCard : Card
     {
-        private Room room;
+        private RoomData room;
 
-        public RoomCard(int id, string name, Room room)
+        public RoomCard(int id, string name, RoomData room)
             : base(id, name)
         {
             this.room = room;

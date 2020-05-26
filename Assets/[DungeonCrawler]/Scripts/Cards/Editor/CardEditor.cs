@@ -7,6 +7,7 @@ namespace DungeonCrawler.Cards
     public class CardEditor : EditorWindow
     {
         [Inject] private RoomCardDataLoader roomCardDataLoader;
+        [Inject] private RoomCardDataSaver roomCardDataSaver;
 
         private CardDataCollection<RoomCardData> roomCardDataCollection;
 
@@ -37,6 +38,11 @@ namespace DungeonCrawler.Cards
             DrawRoomCards();
         }
 
+        private void OnInspectorUpdate()
+        {
+            SaveToFile();
+        }
+
         private void DrawRoomCards()
         {
             EditorGUILayout.BeginVertical();
@@ -53,6 +59,11 @@ namespace DungeonCrawler.Cards
             }
 
             EditorGUILayout.EndVertical();
+        }
+
+        private void SaveToFile()
+        {
+            roomCardDataSaver.Save(roomCardDataCollection);
         }
     }
 }
