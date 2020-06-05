@@ -52,11 +52,11 @@ namespace CardboardCore.EntityComponents
         private IEntityLoadData entityLoadData;
         private int selectedIndex;
 
-        [MenuItem("EntityCollection/Editor")]
+        [MenuItem("CardboardCore/Entity Collection")]
         private static void ShowWindow()
         {
             EntityCollectionEditor window = GetWindow<EntityCollectionEditor>();
-            window.titleContent = new GUIContent("EntityCollection");
+            window.titleContent = new GUIContent("Entity Collection");
             window.Show();
         }
 
@@ -102,6 +102,8 @@ namespace CardboardCore.EntityComponents
             for (int i = 0; i < entityDataCollection.entities.Length; i++)
             {
                 DrawEntityData(entityDataCollection.entities[i]);
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
             }
 
             EditorGUILayout.EndVertical();
@@ -118,6 +120,8 @@ namespace CardboardCore.EntityComponents
             DrawRemoveEntityButton(entityData);
 
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
 
             for (int i = 0; i < entityData.components.Length; i++)
             {
@@ -147,6 +151,8 @@ namespace CardboardCore.EntityComponents
             }
 
             EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space();
         }
 
         private void DrawFieldData(FieldData fieldData)

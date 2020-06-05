@@ -1,5 +1,8 @@
-public abstract class CardData
+namespace DungeonCrawler.Cards
 {
-    public string id { get; set; }
-    public string name { get; set; }
+    public abstract class CardData
+    {
+        public int id;
+        public string name;
+    }
 }

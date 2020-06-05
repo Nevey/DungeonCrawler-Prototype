@@ -1,4 +1,6 @@
+using System;
 using CardboardCore.DI;
+using CardboardCore.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,16 +8,17 @@ namespace DungeonCrawler.Cards
 {
     public class CardEditor : EditorWindow
     {
-        [Inject] private RoomCardDataLoader roomCardDataLoader;
-        [Inject] private RoomCardDataSaver roomCardDataSaver;
+        private Type[] cardDataTypes;
 
-        private CardDataCollection<RoomCardData> roomCardDataCollection;
+        private Vector2 scrollPosition;
+
+        private ICardDataEditor cardDataEditor;
 
         [MenuItem("DungeonCrawler/Cards")]
         private static void ShowWindow()
         {
             CardEditor window = GetWindow<CardEditor>();
-            window.titleContent = new GUIContent("CardEditor");
+            window.titleContent = new GUIContent("Card Editor");
             window.Show();
         }
 
@@ -23,7 +26,7 @@ namespace DungeonCrawler.Cards
         {
             Injector.Inject(this);
 
-            roomCardDataCollection = roomCardDataLoader.Load();
+            cardDataTypes = Reflection.FindDerivedTypes<CardData>();
         }
 
         private void OnDisable()
@@ -33,37 +36,54 @@ namespace DungeonCrawler.Cards
 
         private void OnGUI()
         {
-            // Draw tabs based on different CardData types
+            EditorGUILayout.BeginHorizontal("box");
+            DrawCardDataButtons();
+            EditorGUILayout.EndHorizontal();
 
-            DrawRoomCards();
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            cardDataEditor?.DrawCardFields();
+            EditorGUILayout.EndScrollView();
+
+            DrawCreateButton();
         }
 
         private void OnInspectorUpdate()
         {
-            SaveToFile();
+            cardDataEditor?.Save();
         }
 
-        private void DrawRoomCards()
+        private void DrawCardDataButtons()
         {
-            EditorGUILayout.BeginVertical();
-
-            for (int i = 0; i < roomCardDataCollection.cards.Length; i++)
+            for (int i = 0; i < cardDataTypes.Length; i++)
             {
-                RoomCardData card = roomCardDataCollection.cards[i];
+                Type cardDataType = cardDataTypes[i];
 
-                EditorGUILayout.BeginVertical();
+                if (GUILayout.Button(cardDataType.Name))
+                {
+                    // TODO: If this list gets too big, revamp into something automated
+                    if (cardDataType == typeof(RoomCardData))
+                    {
+                        cardDataEditor = new GenericCardDataEditor<RoomCardData, RoomCardDataConfig>();
+                    }
 
-                EditorGUILayout.LabelField(card.name);
+                    if (cardDataType == typeof(TileCardData))
+                    {
+                        cardDataEditor = new GenericCardDataEditor<TileCardData, TileCardDataConfig>();
+                    }
 
-                EditorGUILayout.EndVertical();
+                    cardDataEditor.Load();
+                }
             }
-
-            EditorGUILayout.EndVertical();
         }
 
-        private void SaveToFile()
+        private void DrawCreateButton()
         {
-            roomCardDataSaver.Save(roomCardDataCollection);
+            GUILayout.Space(25f);
+
+            if (GUILayout.Button("Create Card", GUILayout.Width(150f)))
+            {
+                cardDataEditor?.CreateCard();
+            }
         }
     }
 }

@@ -4,13 +4,14 @@ using Newtonsoft.Json;
 
 namespace DungeonCrawler.Cards
 {
-    public abstract class CardDataSaver<T> where T : CardData
+    public class CardDataSaver<TCardData, TCardDataConfig>
+        where TCardData : CardData
+        where TCardDataConfig : ICardDataConfig, new()
     {
-        protected abstract string Path { get; }
-
-        public void Save(CardDataCollection<T> collection)
+        public void Save(CardDataCollection<TCardData> collection)
         {
-            string path = UnityEngine.Application.dataPath + Path;
+            TCardDataConfig config = new TCardDataConfig();
+            string path = UnityEngine.Application.dataPath + config.Path;
             string json = JsonConvert.SerializeObject(collection);
 
             File.WriteAllText(path, String.Empty);

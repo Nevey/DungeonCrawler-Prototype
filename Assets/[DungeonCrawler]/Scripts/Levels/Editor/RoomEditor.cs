@@ -20,7 +20,7 @@ namespace DungeonCrawler.Levels
         private static void ShowWindow()
         {
             RoomEditor window = GetWindow<RoomEditor>();
-            window.titleContent = new GUIContent("RoomEditor");
+            window.titleContent = new GUIContent("Room Editor");
             window.Show();
         }
 
@@ -75,7 +75,7 @@ namespace DungeonCrawler.Levels
         {
             if (GUILayout.Button("Create"))
             {
-                RoomPropertiesEditor.ShowWindow(roomData =>
+                RoomCreatorEditor.ShowWindow(roomData =>
                 {
                     this.roomData = roomData;
                     Repaint();
@@ -87,7 +87,7 @@ namespace DungeonCrawler.Levels
         {
             if (GUILayout.Button("Load"))
             {
-                string path = EditorUtility.OpenFilePanel("", "/[DungeonCrawler]/Configs/", "json");
+                string path = EditorUtility.OpenFilePanel("", UnityEngine.Application.dataPath + "/[DungeonCrawler]/Configs/Levels/", "json");
                 roomData = roomDataLoader.Load(path);
             }
         }

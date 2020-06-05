@@ -3,16 +3,26 @@ using Newtonsoft.Json;
 
 namespace DungeonCrawler.Cards
 {
-    public abstract class CardDataLoader<T> where T : CardData
+    public class CardDataLoader<TCardData, TCardDataConfig>
+        where TCardData : CardData
+        where TCardDataConfig : ICardDataConfig, new()
     {
-        protected abstract string Path { get; }
-
-        public CardDataCollection<T> Load()
+        public CardDataCollection<TCardData> Load()
         {
-            string path = UnityEngine.Application.dataPath + Path;
+            TCardDataConfig config = new TCardDataConfig();
+            string path = UnityEngine.Application.dataPath + config.Path;
+
+            if (!File.Exists(path))
+            {
+                return new CardDataCollection<TCardData>
+                {
+                    cards = new TCardData[0]
+                };
+            }
+
             string cardJson = File.ReadAllText(path);
 
-            return JsonConvert.DeserializeObject<CardDataCollection<T>>(cardJson);
+            return JsonConvert.DeserializeObject<CardDataCollection<TCardData>>(cardJson);
         }
     }
 }

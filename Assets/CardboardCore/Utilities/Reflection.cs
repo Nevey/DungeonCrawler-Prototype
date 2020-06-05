@@ -127,8 +127,7 @@ namespace CardboardCore.Utilities
 
             foreach (Type type in types)
             {
-                FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic |
-                                                    BindingFlags.Instance | BindingFlags.Public);
+                FieldInfo[] fields = GetFields(type);
 
                 foreach (FieldInfo fieldInfo in fields)
                 {
@@ -148,8 +147,7 @@ namespace CardboardCore.Utilities
 
         public static FieldInfo[] GetFieldsWithAttribute<T>(Type type) where T : Attribute
         {
-            FieldInfo[] fields = type.GetFields(BindingFlags.NonPublic |
-                                                BindingFlags.Instance | BindingFlags.Public);
+            FieldInfo[] fields = GetFields(type);
 
             List<FieldInfo> fieldInfoList = new List<FieldInfo>();
 
@@ -171,6 +169,11 @@ namespace CardboardCore.Utilities
             }
 
             return fieldInfoList.ToArray();
+        }
+
+        public static FieldInfo[] GetFields(Type type)
+        {
+            return type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
         }
     }
 }

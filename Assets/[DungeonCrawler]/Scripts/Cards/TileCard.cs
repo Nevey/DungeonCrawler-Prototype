@@ -4,12 +4,12 @@ namespace DungeonCrawler.Cards
 {
     public class TileCard : Card
     {
-        private TileData tile;
+        private TileData tileData;
 
-        public TileCard(int id, string name, TileData tile)
+        public TileCard(int id, string name, TileData tileData)
             : base(id, name)
         {
-            this.tile = tile;
+            this.tileData = tileData;
         }
     }
 }

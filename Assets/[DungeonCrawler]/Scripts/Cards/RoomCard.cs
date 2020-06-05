@@ -4,12 +4,12 @@ namespace DungeonCrawler.Cards
 {
     public class RoomCard : Card
     {
-        private RoomData room;
+        private RoomData roomData;
 
-        public RoomCard(int id, string name, RoomData room)
+        public RoomCard(int id, string name, RoomData roomData)
             : base(id, name)
         {
-            this.room = room;
+            this.roomData = roomData;
         }
     }
 }
