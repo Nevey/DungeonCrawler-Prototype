@@ -4,6 +4,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using GameObject = UnityEngine.GameObject;
 using Vector3 = UnityEngine.Vector3;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
+using System;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
@@ -11,8 +12,10 @@ namespace DungeonCrawler.EntityComponents.Components
     {
         [TweakableField] private string key;
 
-        private PositionComponent positionComponent;
-        private GameObject gameObject;
+        protected PositionComponent positionComponent;
+        protected GameObject gameObject;
+
+        protected event Action LoadFinishedEvent;
 
         public ViewComponent(Entity owner) : base(owner)
         {
@@ -21,9 +24,6 @@ namespace DungeonCrawler.EntityComponents.Components
         protected override void OnStart()
         {
             positionComponent = GetComponent<PositionComponent>();
-
-            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(key);
-            handle.Completed += OnLoadPrefabCompleted;
         }
 
         protected override void OnStop()
@@ -41,6 +41,13 @@ namespace DungeonCrawler.EntityComponents.Components
 
             this.gameObject = gameObject;
 
+            LoadFinishedEvent?.Invoke();
+        }
+
+        public virtual void Load()
+        {
+            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(key);
+            handle.Completed += OnLoadPrefabCompleted;
         }
     }
 }

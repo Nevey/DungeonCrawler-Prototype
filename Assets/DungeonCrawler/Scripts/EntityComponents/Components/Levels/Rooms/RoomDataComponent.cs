@@ -4,14 +4,16 @@ using DungeonCrawler.Levels;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
-    public class RoomViewComponent : Component
+    /// <summary>
+    /// Holds room data and grid information
+    /// </summary>
+    public class RoomDataComponent : Component
     {
         private GameplayEntityFactory gameplayEntityFactory;
-        private RoomLayoutComponent roomLayoutComponent;
-
+        private RoomData roomData;
         private List<Entity> tileEntities;
 
-        public RoomViewComponent(Entity owner) : base(owner)
+        public RoomDataComponent(Entity owner) : base(owner)
         {
         }
 
@@ -19,20 +21,7 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             gameplayEntityFactory = new GameplayEntityFactory();
 
-            roomLayoutComponent = GetComponent<RoomLayoutComponent>();
-            roomLayoutComponent.OnDataUpdatedEvent += OnRoomDataUpdated;
-
             tileEntities = new List<Entity>();
-        }
-
-        protected override void OnStop()
-        {
-            roomLayoutComponent.OnDataUpdatedEvent -= OnRoomDataUpdated;
-        }
-
-        private void OnRoomDataUpdated(RoomData roomData)
-        {
-            CreateTiles(roomData);
         }
 
         private void CreateTiles(RoomData roomData)
@@ -41,17 +30,25 @@ namespace DungeonCrawler.EntityComponents.Components
             {
                 for (int y = 0; y < roomData.gridSizeY; y++)
                 {
-                    tileEntities.Add(CreateTile(x, y));
+                    tileEntities.Add(CreateTile(roomData.tiles[x, y]));
                 }
             }
         }
 
-        private Entity CreateTile(int x, int y)
+        private Entity CreateTile(TileData tileData)
         {
             Entity tileEntity = gameplayEntityFactory.Instantiate("TileEntity");
-            tileEntity.GetComponent<PositionComponent>().SetPosition(x, y);
+            tileEntity.GetComponent<TileDataComponent>().SetData(tileData);
+            tileEntity.GetComponent<PositionComponent>().SetPosition(tileData.x, tileData.y);
+            tileEntity.GetComponent<TileViewComponent>().Load();
 
             return tileEntity;
+        }
+
+        public void Load(int id)
+        {
+            roomData = new RoomDataLoader().Load(id);
+            CreateTiles(roomData);
         }
     }
 }

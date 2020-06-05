@@ -32,14 +32,14 @@ namespace DungeonCrawler.Levels
         public void CreateInitialRoom()
         {
             Entity entity = CreateRoomEntity("InitialRoomEntity");
-            entity.GetComponent<RoomDataLoaderComponent>().LoadRoom(0);
-            entity.GetComponent<SpawnPlayerComponent>().Spawn(2, 2);
+            entity.GetComponent<RoomDataComponent>().Load(0);
+            entity.GetComponent<SpawnPlayerComponent>().Spawn();
         }
 
         public void CreateRoom(int id)
         {
             Entity entity = CreateRoomEntity("RoomEntity");
-            entity.GetComponent<RoomDataLoaderComponent>().LoadRoom(id);
+            entity.GetComponent<RoomDataComponent>().Load(id);
         }
     }
 }

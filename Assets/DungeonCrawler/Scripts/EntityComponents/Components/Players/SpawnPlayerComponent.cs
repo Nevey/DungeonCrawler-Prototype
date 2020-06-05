@@ -19,10 +19,12 @@ namespace DungeonCrawler.EntityComponents.Components
             playerEntities = new List<Entity>();
         }
 
-        public void Spawn(int x, int y)
+        public void Spawn()
         {
+            // TODO: Find eligible spot in current room to stand
             Entity entity = gameplayEntityFactory.Instantiate("PlayerEntity");
-            entity.GetComponent<PositionComponent>().SetPosition(x, y);
+            entity.GetComponent<PositionComponent>().SetPosition(2, 2);
+            entity.GetComponent<PlayerViewComponent>().Load();
 
             playerEntities.Add(entity);
         }
