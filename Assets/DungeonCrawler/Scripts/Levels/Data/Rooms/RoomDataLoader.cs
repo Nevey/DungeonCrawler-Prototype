@@ -28,7 +28,7 @@ namespace DungeonCrawler.Levels
 
         public RoomData Load(int id)
         {
-            string localPath = $"/[DungeonCrawler]/Configs/Levels/Room-{id}";
+            string localPath = $"/DungeonCrawler/Configs/Levels/Room-{id}";
             string path = UnityEngine.Application.dataPath + localPath + ".json";
 
             return Load(path);

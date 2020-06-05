@@ -28,9 +28,9 @@ namespace DungeonCrawler.Levels
         {
             Injector.Inject(this);
 
-            tileSprite = AssetUtility.LoadAssetAtPath<Texture>("Assets/[DungeonCrawler]/Textures/Editor/tile-room.jpg");
-            tileDoorwaySprite = AssetUtility.LoadAssetAtPath<Texture>("Assets/[DungeonCrawler]/Textures/Editor/tile-room-doorway.jpg");
-            tileUnusedSprite = AssetUtility.LoadAssetAtPath<Texture>("Assets/[DungeonCrawler]/Textures/Editor/tile-room-unused.jpg");
+            tileSprite = AssetUtility.LoadAssetAtPath<Texture>("Assets/DungeonCrawler/Textures/Editor/tile-room.jpg");
+            tileDoorwaySprite = AssetUtility.LoadAssetAtPath<Texture>("Assets/DungeonCrawler/Textures/Editor/tile-room-doorway.jpg");
+            tileUnusedSprite = AssetUtility.LoadAssetAtPath<Texture>("Assets/DungeonCrawler/Textures/Editor/tile-room-unused.jpg");
         }
 
         private void OnDisable()

@@ -8,7 +8,7 @@ namespace DungeonCrawler.Levels
     [Injectable]
     public class RoomDataSaver
     {
-        private string Path => "/[DungeonCrawler]/Configs/Levels/";
+        private string Path => "/DungeonCrawler/Configs/Levels/";
 
         private string GetSavePath(RoomData roomData)
         {

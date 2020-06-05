@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/[DungeonCrawler]/Scenes/BootScene.unity
+    path: Assets/DungeonCrawler/Scenes/BootScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/[DungeonCrawler]/Scenes/GameplayScene.unity
+    path: Assets/DungeonCrawler/Scenes/GameplayScene.unity
     guid: 400e2a4c632351845a63ec660d0af799
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2eba595138e8ac640bb09adcc3653188, type: 2}
