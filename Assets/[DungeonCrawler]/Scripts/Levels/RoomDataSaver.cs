@@ -10,18 +10,46 @@ namespace DungeonCrawler.Levels
     {
         private string Path => "/[DungeonCrawler]/Configs/";
 
-        public void Save(string roomName, RoomData room)
+        private string GetSavePath(RoomData roomData)
         {
-            string path = UnityEngine.Application.dataPath + Path + roomName + ".json";
-            string json = JsonConvert.SerializeObject(room);
+            string roomName = "Room-" + roomData.id;
+            return UnityEngine.Application.dataPath + Path + roomName + ".json";
+        }
 
-            if (!File.Exists(path))
+        public void Save(RoomData roomData)
+        {
+            string path = GetSavePath(roomData);
+            string json = JsonConvert.SerializeObject(roomData);
+
+            FileMode fileMode = Exists(roomData) ? FileMode.Truncate : FileMode.Create;
+
+            FileStream fileStream = null;
+
+            try
             {
-                File.Create(path);
-            }
+                fileStream = new FileStream(path, fileMode, FileAccess.ReadWrite, FileShare.ReadWrite);
 
-            File.WriteAllText(path, String.Empty);
-            File.WriteAllText(path, json);
+                using (TextWriter textWriter = new StreamWriter(fileStream))
+                {
+                    fileStream = null;
+                    textWriter.Flush();
+                    textWriter.Write(String.Empty);
+                    textWriter.Write(json);
+                }
+            }
+            finally
+            {
+                if (fileStream != null)
+                {
+                    fileStream.Dispose();
+                }
+            }
+        }
+
+        public bool Exists(RoomData roomData)
+        {
+            string path = GetSavePath(roomData);
+            return File.Exists(path);
         }
     }
 }

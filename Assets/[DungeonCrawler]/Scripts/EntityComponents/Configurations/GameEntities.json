@@ -1,1 +1,1 @@
-{"entities":[{"id":"test","components":[{"id":"TestComponent","fields":[{"id":"randomInteger","value":42},{"id":"randomString","value":"it works! \\o/"}]},{"id":"TestComponent2","fields":[{"id":"randomBoolean","value":false}]}]}]}
+{"entities":[{"id":"RoomLoaderEntity","components":[]},{"id":"RoomEntity","components":[]}]}

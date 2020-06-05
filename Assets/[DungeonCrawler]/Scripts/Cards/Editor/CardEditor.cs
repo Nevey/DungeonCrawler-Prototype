@@ -11,7 +11,7 @@ namespace DungeonCrawler.Cards
 
         private CardDataCollection<RoomCardData> roomCardDataCollection;
 
-        [MenuItem("DunngeonCrawler/Cards")]
+        [MenuItem("DungeonCrawler/Cards")]
         private static void ShowWindow()
         {
             CardEditor window = GetWindow<CardEditor>();

@@ -1,9 +1,1 @@
-{
-    "cards": [
-        {
-            "roomId": 0,
-            "id": "0",
-            "name": "roomCardOne"
-        }
-    ]
-}
+{"cards":[{"roomId":0,"id":"0","name":"roomCardOne"}]}
