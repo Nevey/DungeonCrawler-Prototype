@@ -25,5 +25,13 @@ namespace DungeonCrawler.Levels
 
             return JsonConvert.DeserializeObject<RoomData>(entityJson);
         }
+
+        public RoomData Load(int id)
+        {
+            string localPath = $"/[DungeonCrawler]/Configs/Levels/Room-{id}";
+            string path = UnityEngine.Application.dataPath + localPath + ".json";
+
+            return Load(path);
+        }
     }
 }

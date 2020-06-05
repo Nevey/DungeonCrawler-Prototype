@@ -8,17 +8,22 @@ namespace CardboardCore.EntityComponents
 {
     public class Entity : IGameLoopable
     {
+        public readonly string name;
+
         private readonly List<Component> components = new List<Component>();
+
 
         public Entity(EntityData entityData)
         {
+            name = entityData.id;
+
             for (int i = 0; i < entityData.components.Length; i++)
             {
                 ComponentData componentData = entityData.components[i];
 
                 Type type = Reflection.GetType(componentData.id);
 
-                Component component = Activator.CreateInstance(type) as Component;
+                Component component = Activator.CreateInstance(type, this) as Component;
 
                 FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<TweakableFieldAttribute>(type);
 
@@ -82,7 +87,23 @@ namespace CardboardCore.EntityComponents
             return component;
         }
 
-        public void RemoveComponent<T>() where T : Component
+        public bool RemoveComponent<T>() where T : Component
+        {
+            Component component = GetComponent<T>();
+
+            if (component == null)
+            {
+                return false;
+            }
+
+            component.Stop();
+
+            components.Remove(component);
+
+            return true;
+        }
+
+        public T GetComponent<T>(bool throwException = false) where T : Component
         {
             Type type = typeof(T);
 
@@ -90,11 +111,16 @@ namespace CardboardCore.EntityComponents
             {
                 if (components[i].GetType() == type)
                 {
-                    components.RemoveAt(i);
-                    components[i].Stop();
-                    break;
+                    return components[i] as T;
                 }
             }
+
+            if (throwException)
+            {
+                throw Log.Exception($"Component of type <b>{type.Name}</b> could not be found on Entity <b>{name}</b>!");
+            }
+
+            return null;
         }
     }
 }

@@ -65,7 +65,7 @@ namespace CardboardCore.EntityComponents
             Injector.Inject(this);
 
             // TODO: Find all IEntityLoadData and pick one
-            entityLoadData = new GameEntityLoadData();
+            entityLoadData = new GameplayEntityLoadData();
 
             entityDataCollection = entityCollectionLoader.Load(entityLoadData);
         }

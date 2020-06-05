@@ -8,6 +8,7 @@ namespace DungeonCrawler.Application
         public ApplicationStateMachine()
         {
             SetInitialState<BootState>();
+            AddTransition<BootState, GameplayState>();
         }
     }
 }

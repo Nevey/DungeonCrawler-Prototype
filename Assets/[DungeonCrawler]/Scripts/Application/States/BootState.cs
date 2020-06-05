@@ -1,23 +1,27 @@
 using CardboardCore.DI;
-using CardboardCore.EntityComponents;
-using CardboardCore.Loop;
 using CardboardCore.StateMachines;
-using DungeonCrawler.EntityComponents;
+using DungeonCrawler.Scenes;
 
 namespace DungeonCrawler.Application.States
 {
     public class BootState : State
     {
-        [Inject] private GameEntityFactory factory;
+        [Inject] private SceneLoader sceneLoader;
 
         protected override void OnEnter()
         {
-            Entity entity = factory.Instantiate("test");
+            sceneLoader.SceneLoadFinishedEvent += OnSceneLoadFinished;
+            sceneLoader.LoadSceneAsyncSingle("GameplayScene");
         }
 
         protected override void OnExit()
         {
+            sceneLoader.SceneLoadFinishedEvent -= OnSceneLoadFinished;
+        }
 
+        private void OnSceneLoadFinished()
+        {
+            owner.ToNextState();
         }
     }
 }
