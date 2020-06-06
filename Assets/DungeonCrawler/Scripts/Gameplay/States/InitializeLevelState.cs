@@ -15,6 +15,9 @@ namespace DungeonCrawler.Gameplay.States
         {
             levelEntity = gameplayEntityFactory.Instantiate("LevelEntity");
             levelEntity.GetComponent<LevelBuilderComponent>().CreateInitialRoom();
+
+            // TODO: Wait for all players to have their level loaded
+            owner.ToNextState();
         }
 
         protected override void OnExit()

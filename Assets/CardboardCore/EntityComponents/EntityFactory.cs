@@ -1,13 +1,13 @@
 using CardboardCore.Loop;
 using CardboardCore.DI;
-using CardboardCore.Utilities;
 
 namespace CardboardCore.EntityComponents
 {
     public class EntityFactory<T> where T : IEntityLoadData
     {
-        [Inject] private UpdateLoop updateLoop;
         [Inject] private EntityCollectionLoader entityCollectionLoader;
+        [Inject] private EntityRegister entityRegister;
+        [Inject] private UpdateLoop updateLoop;
 
         private EntityDataCollection entityDataCollection;
 
@@ -31,6 +31,7 @@ namespace CardboardCore.EntityComponents
             EntityData entityData = entityDataCollection.GetEntityWithId(id);
             Entity entity = new Entity(entityData);
 
+            entityRegister.RegisterEntity(entity);
             updateLoop.RegisterGameLoopable(entity);
 
             return entity;

@@ -34,7 +34,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         private void OnLoadFinished()
         {
-            SetMaterial();
+            // SetMaterial();
         }
 
         private void SetMaterial()

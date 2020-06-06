@@ -31,6 +31,13 @@ MonoBehaviour:
     - default
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: 56af625bedfde3e49baca949d05fc398
+    m_Address: Card
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   - m_GUID: 653b3c3ac21f705438308e2f99e946d4
     m_Address: TileDefaultMaterial
     m_ReadOnly: 0

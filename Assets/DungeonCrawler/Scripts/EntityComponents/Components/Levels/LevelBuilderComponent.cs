@@ -8,6 +8,8 @@ namespace DungeonCrawler.EntityComponents.Components
         private GameplayEntityFactory entityFactory;
         private List<Entity> roomEntities;
 
+        public List<Entity> RoomEntities => roomEntities;
+
         public LevelBuilderComponent(Entity owner) : base(owner)
         {
         }
@@ -31,7 +33,6 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             Entity entity = CreateRoomEntity("InitialRoomEntity");
             entity.GetComponent<RoomDataComponent>().Load(0);
-            entity.GetComponent<SpawnPlayerComponent>().Spawn();
         }
 
         public void CreateRoom(int id)

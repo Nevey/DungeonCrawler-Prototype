@@ -12,6 +12,9 @@ namespace DungeonCrawler.EntityComponents.Components
         private GameplayEntityFactory gameplayEntityFactory;
         private RoomData roomData;
         private List<Entity> tileEntities;
+        private List<TileDataComponent> tileDataComponents;
+
+        public List<TileDataComponent> TileEntities => tileDataComponents;
 
         public RoomDataComponent(Entity owner) : base(owner)
         {
@@ -22,6 +25,7 @@ namespace DungeonCrawler.EntityComponents.Components
             gameplayEntityFactory = new GameplayEntityFactory();
 
             tileEntities = new List<Entity>();
+            tileDataComponents = new List<TileDataComponent>();
         }
 
         private void CreateTiles(RoomData roomData)
@@ -38,7 +42,11 @@ namespace DungeonCrawler.EntityComponents.Components
         private Entity CreateTile(TileData tileData)
         {
             Entity tileEntity = gameplayEntityFactory.Instantiate("TileEntity");
-            tileEntity.GetComponent<TileDataComponent>().SetData(tileData);
+
+            TileDataComponent tileDataComponent = tileEntity.GetComponent<TileDataComponent>();
+            tileDataComponent.SetData(tileData);
+            tileDataComponents.Add(tileDataComponent);
+
             tileEntity.GetComponent<PositionComponent>().SetPosition(tileData.x, tileData.y);
             tileEntity.GetComponent<TileViewComponent>().Load();
 
@@ -49,6 +57,21 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             roomData = new RoomDataLoader().Load(id);
             CreateTiles(roomData);
+        }
+
+        public TileDataComponent[] GetTiles(TileState tileState)
+        {
+            List<TileDataComponent> foundTiles = new List<TileDataComponent>();
+
+            for (int i = 0; i < tileDataComponents.Count; i++)
+            {
+                if (tileDataComponents[i].Data.tileState == tileState)
+                {
+                    foundTiles.Add(tileDataComponents[i]);
+                }
+            }
+
+            return foundTiles.ToArray();
         }
     }
 }
