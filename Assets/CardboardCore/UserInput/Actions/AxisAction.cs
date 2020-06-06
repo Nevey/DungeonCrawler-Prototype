@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace CardboardCore.UserInput.Actions
@@ -7,16 +8,18 @@ namespace CardboardCore.UserInput.Actions
         private readonly string axis;
         private float axisInput;
 
-        public float AxisInput => axisInput;
+        public event Action<float> OnAxisInputEvent;
 
         public AxisAction(string axis)
         {
             this.axis = axis;
         }
-        
+
         public override void Update()
         {
             axisInput = Input.GetAxis(axis);
+
+            OnAxisInputEvent?.Invoke(axisInput);
         }
 
         public override void Reset()

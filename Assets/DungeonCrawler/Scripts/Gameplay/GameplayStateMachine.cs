@@ -10,6 +10,7 @@ namespace DungeonCrawler.Gameplay
             SetInitialState<InitializeLevelState>();
             AddTransition<InitializeLevelState, SpawnPlayersState>();
             AddTransition<SpawnPlayersState, PlaceCardsState>();
+            AddTransition<PlaceCardsState, PlayerMovementState>();
         }
     }
 }

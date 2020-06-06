@@ -1,20 +1,22 @@
 using System.Collections.Generic;
-using CardboardCore.DI;
+using CardboardCore.EntityComponents;
 
 namespace CardboardCore.UserInput
 {
-    public abstract class InputManager : CardboardCoreBehaviour
+    public abstract class InputManagerComponent : Component
     {
         private readonly List<ActionSet> actionSets = new List<ActionSet>();
 
-        protected override void OnDestroy()
+        protected InputManagerComponent(Entity owner) : base(owner)
         {
-            base.OnDestroy();
+        }
 
+        protected override void OnStop()
+        {
             Unbind();
         }
 
-        private void Update()
+        protected override void OnUpdate(double deltaTime)
         {
             for (int i = 0; i < actionSets.Count; i++)
             {

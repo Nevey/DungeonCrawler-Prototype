@@ -36,6 +36,10 @@ namespace DungeonCrawler.Gameplay.States
             {
                 CreateRoomCards(doorwayTiles[i]);
             }
+
+            // TODO: Create tile cards too...
+
+            owner.ToNextState();
         }
 
         protected override void OnExit()

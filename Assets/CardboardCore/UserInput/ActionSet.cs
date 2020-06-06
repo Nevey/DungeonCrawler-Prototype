@@ -8,7 +8,7 @@ namespace CardboardCore.UserInput
     {
         private readonly List<Action> actions = new List<Action>();
         private bool isBound;
-        
+
         public bool IsBound => isBound;
 
         protected AxisAction CreateAxisAction(string axis)
@@ -27,14 +27,19 @@ namespace CardboardCore.UserInput
             return buttonAction;
         }
 
+        protected abstract void OnBind();
+        protected abstract void OnUnbind();
+
         public void Bind()
         {
             isBound = true;
+            OnBind();
         }
 
         public void Unbind()
         {
             isBound = false;
+            OnUnbind();
 
             for (int i = 0; i < actions.Count; i++)
             {
