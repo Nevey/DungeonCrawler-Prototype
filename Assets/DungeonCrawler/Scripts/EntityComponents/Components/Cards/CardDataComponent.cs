@@ -3,15 +3,16 @@ using DungeonCrawler.Cards;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
-    public class CardDataComponent : Component
+    public class CardDataComponent<T> : Component
+        where T : CardData
     {
-        private CardData cardData;
+        protected T cardData;
 
         public CardDataComponent(Entity owner) : base(owner)
         {
         }
 
-        public void SetData(CardData cardData)
+        public void SetData(T cardData)
         {
             this.cardData = cardData;
         }

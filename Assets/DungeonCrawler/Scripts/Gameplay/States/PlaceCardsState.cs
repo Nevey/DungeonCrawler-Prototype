@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using CardboardCore.DI;
 using CardboardCore.EntityComponents;
 using CardboardCore.StateMachines;
+using DungeonCrawler.Cards;
 using DungeonCrawler.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 using DungeonCrawler.Levels;
@@ -31,7 +34,7 @@ namespace DungeonCrawler.Gameplay.States
 
             for (int i = 0; i < doorwayTiles.Length; i++)
             {
-                CreateCardEntity(doorwayTiles[i]);
+                CreateRoomCards(doorwayTiles[i]);
             }
         }
 
@@ -40,9 +43,19 @@ namespace DungeonCrawler.Gameplay.States
             gameplayEntityFactory = null;
         }
 
-        private void CreateCardEntity(TileDataComponent tileDataComponent)
+        private void CreateRoomCards(TileDataComponent tileDataComponent)
         {
-            Entity cardEntity = gameplayEntityFactory.Instantiate("CardEntity");
+            Entity cardEntity = gameplayEntityFactory.Instantiate("RoomCardEntity");
+
+            // TODO: Get random card from once card decks are built
+            CardDataCollection<RoomCardData> collection = new CardDataLoader<RoomCardData, RoomCardDataConfig>().Load();
+            List<RoomCardData> cards = collection.cards.ToList();
+            cards.RemoveAt(0); // Remove initial room, temp solution...
+
+            int index = UnityEngine.Random.Range(0, cards.Count);
+            RoomCardData cardData = cards[index];
+
+            cardEntity.GetComponent<RoomCardDataComponent>().SetData(cardData);
 
             PositionComponent tilePositionComponent = tileDataComponent.GetComponent<PositionComponent>();
             PositionComponent cardPositionComponent = cardEntity.GetComponent<PositionComponent>();
