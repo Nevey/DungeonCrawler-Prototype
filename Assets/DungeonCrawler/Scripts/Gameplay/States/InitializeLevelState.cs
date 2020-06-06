@@ -1,16 +1,20 @@
-using CardboardCore.DI;
+using CardboardCore.EntityComponents;
 using CardboardCore.StateMachines;
-using DungeonCrawler.Levels;
+using DungeonCrawler.EntityComponents;
+using DungeonCrawler.EntityComponents.Components;
 
 namespace DungeonCrawler.Gameplay.States
 {
     public class InitializeLevelState : State
     {
-        [Inject] private LevelManager levelManager;
+        private GameplayEntityFactory gameplayEntityFactory = new GameplayEntityFactory();
+
+        private Entity levelEntity;
 
         protected override void OnEnter()
         {
-            levelManager.CreateInitialRoom();
+            levelEntity = gameplayEntityFactory.Instantiate("LevelEntity");
+            levelEntity.GetComponent<LevelBuilderComponent>().CreateInitialRoom();
         }
 
         protected override void OnExit()

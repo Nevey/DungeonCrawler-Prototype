@@ -1,22 +1,20 @@
 using System.Collections.Generic;
-using CardboardCore.DI;
 using CardboardCore.EntityComponents;
-using DungeonCrawler.EntityComponents;
-using DungeonCrawler.EntityComponents.Components;
 
-namespace DungeonCrawler.Levels
+namespace DungeonCrawler.EntityComponents.Components
 {
-    [Injectable(Singleton = true)]
-    public class LevelManager
+    public class LevelBuilderComponent : Component
     {
         private GameplayEntityFactory entityFactory;
-
         private List<Entity> roomEntities;
 
-        public LevelManager()
+        public LevelBuilderComponent(Entity owner) : base(owner)
+        {
+        }
+
+        protected override void OnStart()
         {
             entityFactory = new GameplayEntityFactory();
-
             roomEntities = new List<Entity>();
         }
 
