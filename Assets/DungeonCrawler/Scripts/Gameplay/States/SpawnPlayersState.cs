@@ -16,6 +16,8 @@ namespace DungeonCrawler.Gameplay.States
         protected override void OnEnter()
         {
             Entity initialRoomEntity = entityRegister.FindEntity("InitialRoomEntity");
+            RoomDataComponent roomDataComponent = initialRoomEntity.GetComponent<RoomDataComponent>();
+
             gameplayCameraEntity = entityRegister.FindEntity("GameplayCameraEntity");
 
             // TODO: Listen to spawns from other players, and let other players know we've spawned our player
@@ -24,6 +26,8 @@ namespace DungeonCrawler.Gameplay.States
 
             Entity playerEntity = new GameplayEntityFactory().Instantiate("PlayerEntity");
             playerEntity.GetComponent<GridPositionComponent>().SetPosition(2, 2); // TODO: Set player on a free position based on initial room's grid
+
+            playerEntity.GetComponent<RoomAwarenessComponent>().EnterRoom(roomDataComponent.roomData);
 
             playerViewComponent = playerEntity.GetComponent<PlayerViewComponent>();
             playerViewComponent.LoadFinishedEvent += OnPlayerViewLoadFinished;

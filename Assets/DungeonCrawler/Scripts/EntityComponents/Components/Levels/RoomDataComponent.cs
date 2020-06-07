@@ -10,9 +10,10 @@ namespace DungeonCrawler.EntityComponents.Components
     public class RoomDataComponent : Component
     {
         private GameplayEntityFactory gameplayEntityFactory;
-        private RoomData roomData;
         private List<Entity> tileEntities;
         private List<TileDataComponent> tileDataComponents;
+
+        public RoomData roomData { get; private set; }
 
         public List<TileDataComponent> TileEntities => tileDataComponents;
 
