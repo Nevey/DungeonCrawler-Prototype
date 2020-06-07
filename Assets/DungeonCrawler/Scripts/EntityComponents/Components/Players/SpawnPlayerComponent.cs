@@ -23,7 +23,7 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             // TODO: Find eligible spot in current room to stand
             Entity entity = gameplayEntityFactory.Instantiate("PlayerEntity");
-            entity.GetComponent<PositionComponent>().SetPosition(2, 2);
+            entity.GetComponent<GridPositionComponent>().SetPosition(2, 2);
             entity.GetComponent<PlayerViewComponent>().Load();
 
             playerEntities.Add(entity);

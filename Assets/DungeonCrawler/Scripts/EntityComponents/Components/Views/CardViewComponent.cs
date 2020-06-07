@@ -4,6 +4,8 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class CardViewComponent : ViewComponent
     {
+        private GridPositionComponent gridPositionComponent;
+
         public CardViewComponent(Entity owner) : base(owner)
         {
         }
@@ -11,36 +13,26 @@ namespace DungeonCrawler.EntityComponents.Components
         protected override void OnStart()
         {
             base.OnStart();
-
             LoadFinishedEvent += OnLoadFinished;
+
+            gridPositionComponent = GetComponent<GridPositionComponent>();
         }
 
         protected override void OnStop()
         {
             base.OnStop();
-
             LoadFinishedEvent -= OnLoadFinished;
         }
 
         private void OnLoadFinished()
         {
-            PlaceOnGridBackUp();
+            PlaceOnGridBacksideUp();
         }
 
-        private void PlaceOnGridBackUp()
+        private void PlaceOnGridBacksideUp()
         {
-            gameObject.transform.position = new UnityEngine.Vector3(
-                positionComponent.x,
-                0.1f,
-                positionComponent.y
-            );
-
-            UnityEngine.Quaternion randomRotation = UnityEngine.Random.rotation;
-
-            gameObject.transform.eulerAngles = new UnityEngine.Vector3(
-                90f,
-                0f,
-                randomRotation.eulerAngles.z);
+            positionComponent.SetPosition(gridPositionComponent.x, 0.1f, gridPositionComponent.y);
+            rotationComponent.SetRandomRotationZ(90f);
         }
     }
 }

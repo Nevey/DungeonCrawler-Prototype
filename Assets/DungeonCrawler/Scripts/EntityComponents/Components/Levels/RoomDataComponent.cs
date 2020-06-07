@@ -47,7 +47,9 @@ namespace DungeonCrawler.EntityComponents.Components
             tileDataComponent.SetData(tileData);
             tileDataComponents.Add(tileDataComponent);
 
-            tileEntity.GetComponent<PositionComponent>().SetPosition(tileData.x, tileData.y);
+            tileEntity.GetComponent<GridPositionComponent>().SetPosition(tileData.x, tileData.y);
+            tileEntity.GetComponent<PositionComponent>().SetPosition(tileData.x, 0f, tileData.y);
+            tileEntity.GetComponent<RotationComponent>().SetRotation(90f, 0f, 0f);
             tileEntity.GetComponent<TileViewComponent>().Load();
 
             return tileEntity;

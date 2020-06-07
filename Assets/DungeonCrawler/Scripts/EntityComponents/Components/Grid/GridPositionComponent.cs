@@ -3,14 +3,14 @@ using CardboardCore.EntityComponents;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
-    public class PositionComponent : Component
+    public class GridPositionComponent : Component
     {
         public int x { get; private set; }
         public int y { get; private set; }
 
         public event Action<int, int> PositionUpdatedEvent;
 
-        public PositionComponent(Entity owner) : base(owner)
+        public GridPositionComponent(Entity owner) : base(owner)
         {
         }
 

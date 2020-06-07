@@ -10,7 +10,7 @@ namespace DungeonCrawler.EntityComponents.Components
     {
         [TweakableField] private string prefabKey;
 
-        private PositionComponent positionComponent;
+        private GridPositionComponent positionComponent;
         private MovementInputManager movementInputManager;
         private bool bindInputOnceLoaded;
 
@@ -20,7 +20,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         protected override void OnStart()
         {
-            positionComponent = GetComponent<PositionComponent>();
+            positionComponent = GetComponent<GridPositionComponent>();
 
             AsyncOperationHandle<UnityEngine.GameObject> handle = Addressables.LoadAssetAsync<UnityEngine.GameObject>(prefabKey);
             handle.Completed += OnLoadPrefabCompleted;

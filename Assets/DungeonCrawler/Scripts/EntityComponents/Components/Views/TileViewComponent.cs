@@ -1,4 +1,3 @@
-using System;
 using CardboardCore.EntityComponents;
 using UnityEngine;
 using UnityEngine.AddressableAssets;

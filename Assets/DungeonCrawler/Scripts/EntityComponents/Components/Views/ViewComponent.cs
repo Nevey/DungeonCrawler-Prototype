@@ -5,6 +5,7 @@ using GameObject = UnityEngine.GameObject;
 using Vector3 = UnityEngine.Vector3;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 using System;
+using UnityEngine;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
@@ -13,6 +14,7 @@ namespace DungeonCrawler.EntityComponents.Components
         [TweakableField] private string key;
 
         protected PositionComponent positionComponent;
+        protected RotationComponent rotationComponent;
         protected GameObject gameObject;
 
         protected event Action LoadFinishedEvent;
@@ -24,28 +26,61 @@ namespace DungeonCrawler.EntityComponents.Components
         protected override void OnStart()
         {
             positionComponent = GetComponent<PositionComponent>();
-            positionComponent.PositionUpdatedEvent += OnPositionUpdated;
+
+            if (positionComponent != null)
+            {
+                positionComponent.PositionUpdatedEvent += OnPositionUpdated;
+            }
+
+            rotationComponent = GetComponent<RotationComponent>();
+
+            if (rotationComponent != null)
+            {
+                rotationComponent.RotationUpdatedEvent += OnRotationUpdated;
+            }
         }
 
         protected override void OnStop()
         {
             MonoBehaviour.Destroy(gameObject);
-            positionComponent.PositionUpdatedEvent -= OnPositionUpdated;
+
+            if (positionComponent != null)
+            {
+                positionComponent.PositionUpdatedEvent -= OnPositionUpdated;
+            }
+
+            if (rotationComponent != null)
+            {
+                rotationComponent.RotationUpdatedEvent -= OnRotationUpdated;
+            }
         }
 
         /// <summary>
         /// Handles visual changes on position data changed. Override to remove default behaviour.
         /// </summary>
-        /// <param name="x">World Position X</param>
-        /// <param name="y">World Position Y</param>
-        protected virtual void OnPositionUpdated(int x, int y)
+        /// <param name="position">Vector3 World Position</param>
+        protected virtual void OnPositionUpdated(Vector3 position)
         {
             if (gameObject == null)
             {
                 return;
             }
 
-            gameObject.transform.position = new Vector3(positionComponent.x, 0f, positionComponent.y);
+            gameObject.transform.position = position;
+        }
+
+        /// <summary>
+        /// Handles visual changes on rotation data changed. Override to remove default behaviour.
+        /// </summary>
+        /// <param name="rotation"></param>
+        protected virtual void OnRotationUpdated(Quaternion rotation)
+        {
+            if (gameObject == null)
+            {
+                return;
+            }
+
+            gameObject.transform.rotation = rotation;
         }
 
         private void OnLoadPrefabCompleted(AsyncOperationHandle<GameObject> handle)
@@ -54,7 +89,8 @@ namespace DungeonCrawler.EntityComponents.Components
             handle.Completed -= OnLoadPrefabCompleted;
 
             GameObject gameObject = UnityEngine.MonoBehaviour.Instantiate(handle.Result);
-            gameObject.transform.position = new Vector3(positionComponent.x, 0f, positionComponent.y);
+            gameObject.transform.position = positionComponent == null ? Vector3.zero : positionComponent.position;
+            gameObject.transform.rotation = rotationComponent == null ? Quaternion.identity : rotationComponent.rotation;
 
             this.gameObject = gameObject;
 

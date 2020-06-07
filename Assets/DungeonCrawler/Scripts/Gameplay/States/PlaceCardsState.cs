@@ -61,8 +61,8 @@ namespace DungeonCrawler.Gameplay.States
 
             cardEntity.GetComponent<RoomCardDataComponent>().SetData(cardData);
 
-            PositionComponent tilePositionComponent = tileDataComponent.GetComponent<PositionComponent>();
-            PositionComponent cardPositionComponent = cardEntity.GetComponent<PositionComponent>();
+            GridPositionComponent tilePositionComponent = tileDataComponent.GetComponent<GridPositionComponent>();
+            GridPositionComponent cardPositionComponent = cardEntity.GetComponent<GridPositionComponent>();
 
             cardPositionComponent.SetPosition(tilePositionComponent.x, tilePositionComponent.y);
 
