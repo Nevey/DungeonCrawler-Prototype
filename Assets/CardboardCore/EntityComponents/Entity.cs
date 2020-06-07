@@ -105,11 +105,13 @@ namespace CardboardCore.EntityComponents
 
         public T GetComponent<T>(bool throwException = false) where T : Component
         {
-            Type type = typeof(T);
+            Type typeToFind = typeof(T);
 
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].GetType() == type)
+                Type typeToCheck = components[i].GetType();
+
+                if (typeToCheck == typeToFind || typeToCheck.BaseType == typeToFind)
                 {
                     return components[i] as T;
                 }
@@ -117,7 +119,7 @@ namespace CardboardCore.EntityComponents
 
             if (throwException)
             {
-                throw Log.Exception($"Component of type <b>{type.Name}</b> could not be found on Entity <b>{name}</b>!");
+                throw Log.Exception($"Component of type <b>{typeToFind.Name}</b> could not be found on Entity <b>{name}</b>!");
             }
 
             return null;

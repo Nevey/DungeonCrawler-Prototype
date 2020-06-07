@@ -19,6 +19,7 @@ namespace DungeonCrawler.Gameplay.States
             Entity playerEntity = entityRegister.FindEntity("PlayerEntity");
 
             movementInputComponent = playerEntity.GetComponent<MovementInputComponent>();
+            movementInputComponent.SetGameplayCameraEntity(entityRegister.FindEntity("GameplayCameraEntity"));
             movementInputComponent.Bind();
         }
 

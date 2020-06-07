@@ -19,9 +19,16 @@ namespace DungeonCrawler.EntityComponents.Components
             RotationUpdatedEvent?.Invoke(rotation);
         }
 
-        public void SetRotation(UnityEngine.Quaternion rotation)
+        public void SetRotation(UnityEngine.Quaternion rotation, bool @override = false)
         {
             this.rotation = rotation;
+
+            // (Temp) Solution to not write pre-invented rotation code
+            if (@override)
+            {
+                return;
+            }
+
             DispatchRotationUpdatedEvent();
         }
 

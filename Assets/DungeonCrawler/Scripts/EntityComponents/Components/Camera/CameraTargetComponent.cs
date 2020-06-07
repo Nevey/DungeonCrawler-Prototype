@@ -26,7 +26,7 @@ namespace DungeonCrawler.EntityComponents.Components
                 return;
             }
 
-            cameraViewComponent.gameObject.transform.LookAt(target.gameObject.transform);
+            cameraViewComponent.LookAt(target);
         }
 
         public void SetTarget(ViewComponent target)

@@ -99,5 +99,13 @@ namespace DungeonCrawler.EntityComponents.Components
             AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(key);
             handle.Completed += OnLoadPrefabCompleted;
         }
+
+        public void LookAt(ViewComponent target)
+        {
+            gameObject.transform.LookAt(target.gameObject.transform);
+
+            // TODO: Create own LookAt code, so we don't have to do weird stuff like this
+            rotationComponent.SetRotation(gameObject.transform.rotation, true);
+        }
     }
 }
