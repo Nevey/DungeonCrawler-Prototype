@@ -1,9 +1,6 @@
 using CardboardCore.EntityComponents;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using GameObject = UnityEngine.GameObject;
-using Vector3 = UnityEngine.Vector3;
-using MonoBehaviour = UnityEngine.MonoBehaviour;
 using System;
 using UnityEngine;
 
@@ -15,9 +12,9 @@ namespace DungeonCrawler.EntityComponents.Components
 
         protected PositionComponent positionComponent;
         protected RotationComponent rotationComponent;
-        protected GameObject gameObject;
+        public GameObject gameObject { get; protected set; }
 
-        protected event Action LoadFinishedEvent;
+        public event Action LoadFinishedEvent;
 
         public ViewComponent(Entity owner) : base(owner)
         {
@@ -85,7 +82,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         private void OnLoadPrefabCompleted(AsyncOperationHandle<GameObject> handle)
         {
-            Addressables.Release(handle);
+            // Addressables.Release(handle);
             handle.Completed -= OnLoadPrefabCompleted;
 
             GameObject gameObject = UnityEngine.MonoBehaviour.Instantiate(handle.Result);

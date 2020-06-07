@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Timers;
 using CardboardCore.DI;
 using CardboardCore.Utilities;
+using UnityEngine;
 
 namespace CardboardCore.Loop
 {
     [Injectable(Singleton = true)]
-    public class UpdateLoop
+    public class UpdateLoop : MonoBehaviour
     {
         private const int TargetFPS = 60;
 
@@ -15,40 +16,17 @@ namespace CardboardCore.Loop
         private long previousTime;
         private readonly List<IGameLoopable> gameLoopables = new List<IGameLoopable>();
 
-        public UpdateLoop()
+        private void Awake()
         {
-            StartLoop();
+            Application.targetFrameRate = TargetFPS;
         }
 
-        private void StartLoop()
+        private void Update()
         {
-            timer = new System.Timers.Timer();
-            timer.Elapsed += OnLoop;
-            timer.Interval = 1000 / TargetFPS;
-            timer.Enabled = true;
-
-            previousTime = DateTime.Now.Ticks;
-        }
-
-        public void StopLoop()
-        {
-            timer.Elapsed -= OnLoop;
-            timer.Enabled = false;
-
-            Log.Warn("UpdateLoop was stopped!");
-        }
-
-        private void OnLoop(object sender, ElapsedEventArgs e)
-        {
-            long deltaTime = e.SignalTime.Ticks - previousTime;
-            deltaTime /= 1000;
-
             for (int i = 0; i < gameLoopables.Count; i++)
             {
-                gameLoopables[i].Update(deltaTime);
+                gameLoopables[i].Update(Time.deltaTime);
             }
-
-            previousTime = e.SignalTime.Ticks;
         }
 
         public void RegisterGameLoopable(IGameLoopable gameLoopable)

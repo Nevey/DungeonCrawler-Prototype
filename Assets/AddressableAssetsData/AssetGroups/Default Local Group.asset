@@ -59,6 +59,13 @@ MonoBehaviour:
     - default
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: cab43e5fc6117bc498eeb1f5b7277028
+    m_Address: GameplayCamera
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 46cbdac139eb19a478b4f579118f160c, type: 2}
   m_SchemaSet:

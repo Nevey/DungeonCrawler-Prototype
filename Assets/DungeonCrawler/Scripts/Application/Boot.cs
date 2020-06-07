@@ -5,13 +5,14 @@ namespace DungeonCrawler.Application
 {
     public class Boot : CardboardCoreBehaviour
     {
-        [Inject] private UpdateLoop updateLoop;
-
+        private UpdateLoop updateLoop;
         private ApplicationStateMachine applicationStateMachine = new ApplicationStateMachine();
 
         protected override void Start()
         {
             base.Start();
+
+            updateLoop = gameObject.AddComponent<UpdateLoop>();
 
             DontDestroyOnLoad(gameObject);
 
@@ -21,8 +22,6 @@ namespace DungeonCrawler.Application
         protected override void OnDestroy()
         {
             applicationStateMachine.Stop();
-
-            updateLoop.StopLoop();
 
             base.OnDestroy();
         }

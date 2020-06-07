@@ -16,7 +16,7 @@ namespace CardboardCore.UserInput
             Unbind();
         }
 
-        protected override void OnUpdate(double deltaTime)
+        protected override void OnUpdate(float deltaTime)
         {
             for (int i = 0; i < actionSets.Count; i++)
             {

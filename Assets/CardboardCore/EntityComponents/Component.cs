@@ -8,6 +8,7 @@ namespace CardboardCore.EntityComponents
 
         public Component(Entity owner)
         {
+            // TODO: Set owner via reflection instead
             this.owner = owner;
         }
 
@@ -23,7 +24,7 @@ namespace CardboardCore.EntityComponents
             Injector.Dump(this);
         }
 
-        public void Update(double deltaTime)
+        public void Update(float deltaTime)
         {
             OnUpdate(deltaTime);
         }
@@ -35,6 +36,6 @@ namespace CardboardCore.EntityComponents
 
         protected virtual void OnStart() { }
         protected virtual void OnStop() { }
-        protected virtual void OnUpdate(double deltaTime) { }
+        protected virtual void OnUpdate(float deltaTime) { }
     }
 }

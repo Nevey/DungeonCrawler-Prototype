@@ -4,6 +4,6 @@ namespace CardboardCore.Loop
     {
         void Start();
         void Stop();
-        void Update(double deltaTime);
+        void Update(float deltaTime);
     }
 }
