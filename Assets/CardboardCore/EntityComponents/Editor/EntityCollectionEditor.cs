@@ -135,6 +135,8 @@ namespace CardboardCore.EntityComponents
             DrawAddComponentButton(entityData);
 
             EditorGUILayout.EndVertical();
+
+            RefreshComponents(entityData);
         }
 
         private void DrawComponentData(EntityData entityData, ComponentData componentData)
@@ -211,6 +213,11 @@ namespace CardboardCore.EntityComponents
 
             for (int i = 0; i < names.Length; i++)
             {
+                if (types[i].ContainsGenericParameters)
+                {
+                    continue;
+                }
+
                 names[i] = types[i].Name;
             }
 
@@ -228,7 +235,6 @@ namespace CardboardCore.EntityComponents
                 Type componentType = types[selectedIndex];
 
                 FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<TweakableFieldAttribute>(componentType);
-
                 FieldData[] fields = new FieldData[fieldInfos.Length];
 
                 for (int i = 0; i < fields.Length; i++)
@@ -270,6 +276,144 @@ namespace CardboardCore.EntityComponents
         private void SaveToFile()
         {
             entityCollectionSaver.Save(entityLoadData, entityDataCollection);
+        }
+
+        private void RefreshComponents(EntityData entityData)
+        {
+            Type[] types = Reflection.FindDerivedTypes<Component>();
+
+            string[] names = new string[types.Length];
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (types[i].ContainsGenericParameters)
+                {
+                    continue;
+                }
+
+                names[i] = types[i].Name;
+            }
+
+
+            // Check if any components were renamed, and remove obsolete components from entity
+            bool changeWasFound = false;
+
+            List<ComponentData> existingComponents = entityData.components.ToList();
+
+            for (int i = entityData.components.Length - 1; i >= 0; i--)
+            {
+                ComponentData existingComponent = entityData.components[i];
+                bool stillExists = false;
+
+                for (int j = 0; j < names.Length; j++)
+                {
+                    string newComponentName = names[j];
+
+                    if (newComponentName == existingComponent.id)
+                    {
+                        stillExists = true;
+                        break;
+
+                    }
+                }
+
+                if (!stillExists)
+                {
+                    existingComponents.Remove(existingComponent);
+                    changeWasFound = true;
+                }
+            }
+
+            // If a change was found, update entity's components array
+            if (changeWasFound)
+            {
+                entityData.components = existingComponents.ToArray();
+            }
+
+            // Check if any fields of any components have changed
+            for (int i = 0; i < names.Length; i++)
+            {
+                string newComponentName = names[i];
+
+                ComponentData componentData = entityData.GetComponentDataWithId(newComponentName);
+
+                if (componentData == null)
+                {
+                    continue;
+                }
+
+                Type componentType = types[i];
+
+                List<FieldData> existingFields = componentData.fields.ToList();
+
+                FieldInfo[] newFieldInfos = Reflection.GetFieldsWithAttribute<TweakableFieldAttribute>(componentType);
+                FieldData[] newFields = new FieldData[newFieldInfos.Length];
+
+                // Remove obsolete fields
+                for (int j = existingFields.Count - 1; j >= 0; j--)
+                {
+                    FieldData existingField = existingFields[j];
+                    bool stillExists = false;
+
+                    for (int k = 0; k < newFieldInfos.Length; k++)
+                    {
+                        FieldInfo newFieldInfo = newFieldInfos[k];
+
+                        if (newFieldInfo.Name == existingField.id)
+                        {
+                            stillExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!stillExists)
+                    {
+                        existingFields.Remove(existingField);
+
+                        changeWasFound = true;
+                    }
+                }
+
+                // Add new fields
+                for (int j = 0; j < newFieldInfos.Length; j++)
+                {
+                    FieldInfo newFieldInfo = newFieldInfos[j];
+                    bool alreadyExists = false;
+
+                    for (int k = 0; k < existingFields.Count; k++)
+                    {
+                        FieldData existingField = existingFields[k];
+
+                        if (existingField.id == newFieldInfo.Name)
+                        {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!alreadyExists)
+                    {
+                        FieldData fieldData = new FieldData();
+
+                        Type fieldType = newFieldInfo.FieldType;
+
+                        fieldData.id = newFieldInfo.Name;
+                        fieldData.value = fieldType == typeof(String) ? "" as string : Activator.CreateInstance(fieldType);
+
+                        existingFields.Add(fieldData);
+
+                        changeWasFound = true;
+                    }
+                }
+
+                componentData.fields = existingFields.ToArray();
+            }
+
+            // Repaint this window if a change was found
+            if (changeWasFound)
+            {
+                Repaint();
+            }
         }
     }
 }

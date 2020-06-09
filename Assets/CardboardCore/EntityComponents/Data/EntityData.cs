@@ -11,5 +11,18 @@ namespace CardboardCore.EntityComponents
         {
             components = new ComponentData[0];
         }
+
+        public ComponentData GetComponentDataWithId(string id)
+        {
+            for (int i = 0; i < components.Length; i++)
+            {
+                if (components[i].id == id)
+                {
+                    return components[i];
+                }
+            }
+
+            return null;
+        }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using CardboardCore.EntityComponents;
-using DG.Tweening;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
