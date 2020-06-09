@@ -1,4 +1,3 @@
-using System;
 using CardboardCore.DI;
 using CardboardCore.EntityComponents;
 using CardboardCore.StateMachines;
@@ -7,24 +6,21 @@ using DungeonCrawler.EntityComponents.Components;
 
 namespace DungeonCrawler.Gameplay.States
 {
-    public class InitializeLevelState : State
+    public class SpawnRoomState : State
     {
         [Inject] private EntityRegister entityRegister;
 
         private GameplayEntityFactory gameplayEntityFactory = new GameplayEntityFactory();
 
-        private Entity levelEntity;
+        private RoomBuilderComponent roomBuilderComponent;
 
         protected override void OnEnter()
         {
-            levelEntity = gameplayEntityFactory.Instantiate("LevelEntity");
+            Entity levelEntity = gameplayEntityFactory.Instantiate("LevelEntity");
 
-            LevelBuilderComponent levelBuilderComponent = levelEntity.GetComponent<LevelBuilderComponent>();
-            levelBuilderComponent.LevelBuildingFinishedEvent += OnLevelBuildingFinished;
-            levelBuilderComponent.CreateInitialRoom();
-
-            // TODO: Wait for all players to have their level loaded
-            owner.ToNextState();
+            roomBuilderComponent = levelEntity.GetComponent<RoomBuilderComponent>();
+            roomBuilderComponent.LevelBuildingFinishedEvent += OnLevelBuildingFinished;
+            roomBuilderComponent.CreateInitialRoom(); // TODO: spawn room based on room card
         }
 
         protected override void OnExit()
@@ -34,10 +30,13 @@ namespace DungeonCrawler.Gameplay.States
 
         private void OnLevelBuildingFinished(RoomDataComponent roomDataComponent)
         {
-            // roomDataComponent.LevelBuildingFinishedEvent -= OnLevelBuildingFinished;
+            roomBuilderComponent.LevelBuildingFinishedEvent -= OnLevelBuildingFinished;
 
             CameraTargetComponent cameraTargetComponent = entityRegister.FindEntity("GameplayCameraEntity").GetComponent<CameraTargetComponent>();
             cameraTargetComponent.SetTarget(roomDataComponent.owner);
+
+            // TODO: Wait for all players to have their level loaded
+            owner.ToNextState();
         }
     }
 }

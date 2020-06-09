@@ -8,8 +8,8 @@ namespace DungeonCrawler.Gameplay
         public GameplayStateMachine()
         {
             SetInitialState<SpawnCameraState>();
-            AddTransition<SpawnCameraState, InitializeLevelState>();
-            AddTransition<InitializeLevelState, SpawnPlayersState>();
+            AddTransition<SpawnCameraState, SpawnRoomState>();
+            AddTransition<SpawnRoomState, SpawnPlayersState>();
             AddTransition<SpawnPlayersState, PlaceCardsState>();
             AddTransition<PlaceCardsState, PlayerMovementState>();
         }
