@@ -1,3 +1,4 @@
+using CardboardCore.DI;
 using CardboardCore.EntityComponents;
 using CardboardCore.StateMachines;
 using DungeonCrawler.EntityComponents;
@@ -7,6 +8,8 @@ namespace DungeonCrawler.Gameplay.States
 {
     public class SpawnCameraState : State
     {
+        [Inject] private EntityRegister entityRegister;
+
         private CameraViewComponent cameraViewComponent;
 
         protected override void OnEnter()
@@ -22,7 +25,7 @@ namespace DungeonCrawler.Gameplay.States
         {
         }
 
-        private void OnCameraViewLoadFinished()
+        private void OnCameraViewLoadFinished(ViewComponent viewComponent)
         {
             cameraViewComponent.LoadFinishedEvent -= OnCameraViewLoadFinished;
             owner.ToNextState();

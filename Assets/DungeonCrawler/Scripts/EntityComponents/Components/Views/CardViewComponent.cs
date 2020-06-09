@@ -24,7 +24,7 @@ namespace DungeonCrawler.EntityComponents.Components
             LoadFinishedEvent -= OnLoadFinished;
         }
 
-        private void OnLoadFinished()
+        private void OnLoadFinished(ViewComponent viewComponent)
         {
             PlaceOnGridBacksideUp();
         }

@@ -10,12 +10,9 @@ namespace DungeonCrawler.EntityComponents.Components
     public class RoomDataComponent : Component
     {
         private GameplayEntityFactory gameplayEntityFactory;
-        private List<Entity> tileEntities;
-        private List<TileDataComponent> tileDataComponents;
+        public List<TileDataComponent> tileDataComponents { get; private set; }
 
         public RoomData roomData { get; private set; }
-
-        public List<TileDataComponent> TileEntities => tileDataComponents;
 
         public RoomDataComponent(Entity owner) : base(owner)
         {
@@ -25,41 +22,17 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             gameplayEntityFactory = new GameplayEntityFactory();
 
-            tileEntities = new List<Entity>();
             tileDataComponents = new List<TileDataComponent>();
         }
 
-        private void CreateTiles(RoomData roomData)
+        public void SetRoomData(RoomData roomData)
         {
-            for (int x = 0; x < roomData.gridSizeX; x++)
-            {
-                for (int y = 0; y < roomData.gridSizeY; y++)
-                {
-                    tileEntities.Add(CreateTile(roomData.tiles[x, y]));
-                }
-            }
+            this.roomData = roomData;
         }
 
-        private Entity CreateTile(TileData tileData)
+        public void AddTile(TileDataComponent tileDataComponent)
         {
-            Entity tileEntity = gameplayEntityFactory.Instantiate("TileEntity");
-
-            TileDataComponent tileDataComponent = tileEntity.GetComponent<TileDataComponent>();
-            tileDataComponent.SetData(tileData);
             tileDataComponents.Add(tileDataComponent);
-
-            tileEntity.GetComponent<GridPositionComponent>().SetPosition(tileData.x, tileData.y);
-            tileEntity.GetComponent<PositionComponent>().SetPosition(tileData.x, 0f, tileData.y);
-            tileEntity.GetComponent<RotationComponent>().SetRotation(90f, 0f, 0f);
-            tileEntity.GetComponent<TileViewComponent>().Load();
-
-            return tileEntity;
-        }
-
-        public void Load(int id)
-        {
-            roomData = new RoomDataLoader().Load(id);
-            CreateTiles(roomData);
         }
 
         public TileDataComponent[] GetTiles(TileState tileState)
@@ -75,6 +48,14 @@ namespace DungeonCrawler.EntityComponents.Components
             }
 
             return foundTiles.ToArray();
+        }
+
+        public TileDataComponent GetFreeTile()
+        {
+            TileDataComponent[] tiles = GetTiles(TileState.Default);
+            int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
+
+            return tiles[randomIndex];
         }
     }
 }

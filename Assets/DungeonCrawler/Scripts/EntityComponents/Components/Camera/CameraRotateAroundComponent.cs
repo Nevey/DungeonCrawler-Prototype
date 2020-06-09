@@ -30,19 +30,17 @@ namespace DungeonCrawler.EntityComponents.Components
             SetPosition(cameraTargetComponent.target);
         }
 
-        private void SetPosition(ViewComponent target)
+        private void SetPosition(PositionComponent target)
         {
             if (target == null)
             {
                 return;
             }
 
-            PositionComponent targetPositionComponent = target.GetComponent<PositionComponent>(true);
-
             UnityEngine.Vector3 offset = new UnityEngine.Vector3(0f, 4.5f, 5f);
             UnityEngine.Vector3 relativePosition = RotationUtil.GetVectorSimple(0f, rotation, 0f, offset);
 
-            positionComponent.SetPosition(targetPositionComponent.position + relativePosition);
+            positionComponent.SetPosition(target.position + relativePosition);
         }
     }
 }

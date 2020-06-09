@@ -45,6 +45,11 @@ namespace CardboardCore.EntityComponents
                         fieldData.value = Convert.ToInt32(fieldData.value);
                     }
 
+                    if (fieldInfo.FieldType == typeof(float))
+                    {
+                        fieldData.value = Convert.ToSingle(fieldData.value);
+                    }
+
                     fieldInfo.SetValue(component, fieldData.value);
                 }
 

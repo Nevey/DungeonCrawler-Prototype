@@ -29,6 +29,10 @@ namespace CardboardCore.EntityComponents
             {
                 value = EditorGUILayout.FloatField((float)value, options);
             }
+            else if (type == typeof(double))
+            {
+                value = EditorGUILayout.DoubleField((double)value, options);
+            }
             else if (type == typeof(string))
             {
                 value = EditorGUILayout.TextField((string)value, options);

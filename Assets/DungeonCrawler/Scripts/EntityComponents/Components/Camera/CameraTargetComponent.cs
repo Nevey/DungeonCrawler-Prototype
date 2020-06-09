@@ -6,9 +6,9 @@ namespace DungeonCrawler.EntityComponents.Components
     public class CameraTargetComponent : Component
     {
         private CameraViewComponent cameraViewComponent;
-        public ViewComponent target { get; private set; }
+        public PositionComponent target { get; private set; }
 
-        public event Action<ViewComponent> TargetUpdatedEvent;
+        public event Action<PositionComponent> TargetUpdatedEvent;
 
         public CameraTargetComponent(Entity owner) : base(owner)
         {
@@ -29,7 +29,7 @@ namespace DungeonCrawler.EntityComponents.Components
             cameraViewComponent.LookAt(target);
         }
 
-        public void SetTarget(ViewComponent target)
+        public void SetTarget(PositionComponent target)
         {
             this.target = target;
             TargetUpdatedEvent?.Invoke(target);
@@ -37,8 +37,8 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public void SetTarget(Entity entity)
         {
-            ViewComponent targetViewComponent = entity.GetComponent<ViewComponent>(true);
-            SetTarget(targetViewComponent);
+            PositionComponent positionComponent = entity.GetComponent<PositionComponent>(true);
+            SetTarget(positionComponent);
         }
     }
 }

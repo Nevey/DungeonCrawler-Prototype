@@ -1,10 +1,16 @@
+using System;
 using CardboardCore.EntityComponents;
+using DG.Tweening;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
     public class PlayerViewComponent : ViewComponent
     {
+        [TweakableField] private float moveTweenDuration;
+
         private GridPositionComponent gridPositionComponent;
+
+        public event Action MovementFinishedEvent;
 
         public PlayerViewComponent(Entity owner) : base(owner)
         {
@@ -27,7 +33,10 @@ namespace DungeonCrawler.EntityComponents.Components
 
         private void OnGridPositionUpdated(int x, int y)
         {
-            positionComponent.SetPosition(x, 0f, y);
+            positionComponent.HopToPosition(x, 0f, y, moveTweenDuration, () =>
+            {
+                MovementFinishedEvent?.Invoke();
+            });
         }
     }
 }

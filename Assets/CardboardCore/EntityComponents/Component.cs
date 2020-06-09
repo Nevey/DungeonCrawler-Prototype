@@ -4,7 +4,7 @@ namespace CardboardCore.EntityComponents
 {
     public abstract class Component
     {
-        protected readonly Entity owner;
+        public readonly Entity owner;
 
         public Component(Entity owner)
         {

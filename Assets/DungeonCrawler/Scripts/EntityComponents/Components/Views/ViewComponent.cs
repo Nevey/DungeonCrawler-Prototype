@@ -14,7 +14,7 @@ namespace DungeonCrawler.EntityComponents.Components
         protected RotationComponent rotationComponent;
         public GameObject gameObject { get; protected set; }
 
-        public event Action LoadFinishedEvent;
+        public event Action<ViewComponent> LoadFinishedEvent;
 
         public ViewComponent(Entity owner) : base(owner)
         {
@@ -91,7 +91,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
             this.gameObject = gameObject;
 
-            LoadFinishedEvent?.Invoke();
+            LoadFinishedEvent?.Invoke(this);
         }
 
         public virtual void Load()
@@ -100,9 +100,9 @@ namespace DungeonCrawler.EntityComponents.Components
             handle.Completed += OnLoadPrefabCompleted;
         }
 
-        public void LookAt(ViewComponent target)
+        public void LookAt(PositionComponent positionComponent)
         {
-            gameObject.transform.LookAt(target.gameObject.transform);
+            gameObject.transform.LookAt(positionComponent.position);
 
             // TODO: Create own LookAt code, so we don't have to do weird stuff like this
             rotationComponent.SetRotation(gameObject.transform.rotation, true);
