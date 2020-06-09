@@ -1,6 +1,5 @@
 using CardboardCore.DI;
 using CardboardCore.EntityComponents;
-using CardboardCore.Utilities;
 using DungeonCrawler.UserInput;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -15,6 +14,7 @@ namespace DungeonCrawler.EntityComponents.Components
         private Entity gameplayCameraEntity;
         private RotationComponent cameraRotationComponent;
         private GridPositionComponent positionComponent;
+        private RoomAwarenessComponent roomAwarenessComponent;
         private MovementInputManager movementInputManager;
         private bool bindInputOnceLoaded;
 
@@ -27,9 +27,12 @@ namespace DungeonCrawler.EntityComponents.Components
             Injector.Inject(this);
 
             positionComponent = GetComponent<GridPositionComponent>();
+            roomAwarenessComponent = GetComponent<RoomAwarenessComponent>();
 
+            // TODO: Don't do this for every MovementInputComponent!
+            // Unfortunately, movement input manager has to be a unity object, otherwise input won't be properly registered
             AsyncOperationHandle<UnityEngine.GameObject> handle = Addressables.LoadAssetAsync<UnityEngine.GameObject>(prefabKey);
-            handle.Completed += OnLoadPrefabCompleted;
+            handle.Completed += OnMovementInputLoaded;
         }
 
         protected override void OnStop()
@@ -45,9 +48,9 @@ namespace DungeonCrawler.EntityComponents.Components
             Injector.Dump(this);
         }
 
-        private void OnLoadPrefabCompleted(AsyncOperationHandle<GameObject> handle)
+        private void OnMovementInputLoaded(AsyncOperationHandle<GameObject> handle)
         {
-            handle.Completed -= OnLoadPrefabCompleted;
+            handle.Completed -= OnMovementInputLoaded;
             Addressables.Release(handle);
 
             UnityEngine.GameObject gameObject = UnityEngine.MonoBehaviour.Instantiate(handle.Result);
@@ -65,6 +68,11 @@ namespace DungeonCrawler.EntityComponents.Components
         private void OnMovementInput(object sender, MovementInputEventArgs e)
         {
             e = ModifyInputBasedOnCameraAngle(e);
+
+            if (!roomAwarenessComponent.CanWalk(e))
+            {
+                return;
+            }
 
             switch (e.inputDirection)
             {
