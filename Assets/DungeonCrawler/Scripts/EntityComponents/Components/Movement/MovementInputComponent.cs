@@ -14,7 +14,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         // Owner's components
         private Entity gameplayCameraEntity;
-        private PositionComponent positionComponent;
+        private HoppingPositionComponent positionComponent;
         private GridPositionComponent gridPositionComponent;
         private RoomAwarenessComponent roomAwarenessComponent;
 
@@ -34,7 +34,7 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             Injector.Inject(this);
 
-            positionComponent = GetComponent<PositionComponent>();
+            positionComponent = GetComponent<HoppingPositionComponent>();
             gridPositionComponent = GetComponent<GridPositionComponent>();
             roomAwarenessComponent = GetComponent<RoomAwarenessComponent>();
 

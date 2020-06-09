@@ -9,6 +9,7 @@ namespace DungeonCrawler.EntityComponents.Components
         [TweakableField] private float moveTweenDuration;
 
         private GridPositionComponent gridPositionComponent;
+        private new HoppingPositionComponent positionComponent;
 
         public event Action MovementFinishedEvent;
 
@@ -22,6 +23,8 @@ namespace DungeonCrawler.EntityComponents.Components
 
             gridPositionComponent = GetComponent<GridPositionComponent>();
             gridPositionComponent.PositionUpdatedEvent += OnGridPositionUpdated;
+
+            positionComponent = GetComponent<HoppingPositionComponent>();
         }
 
         protected override void OnStop()
