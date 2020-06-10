@@ -26,7 +26,7 @@ namespace DungeonCrawler.Gameplay.States
             Entity playerEntity = new GameplayEntityFactory().Instantiate("PlayerEntity");
             playerEntity.GetComponent<GridPositionComponent>().SetPosition(randomFreeTile.Data.x, randomFreeTile.Data.y);
 
-            playerEntity.GetComponent<RoomAwarenessComponent>().EnterRoom(roomDataComponent.roomData);
+            playerEntity.GetComponent<RoomAwarenessComponent>().EnterRoom(roomDataComponent);
 
             playerViewComponent = playerEntity.GetComponent<PlayerViewComponent>();
             playerViewComponent.LoadFinishedEvent += OnPlayerViewLoadFinished;

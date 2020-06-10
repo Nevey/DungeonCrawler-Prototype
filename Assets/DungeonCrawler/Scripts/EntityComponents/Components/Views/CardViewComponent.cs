@@ -1,4 +1,5 @@
 using CardboardCore.EntityComponents;
+using CardboardCore.Utilities;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
@@ -28,7 +29,14 @@ namespace DungeonCrawler.EntityComponents.Components
         private void PlaceOnGridBacksideUp()
         {
             positionComponent.SetPosition(gridPositionComponent.x, 0.1f, gridPositionComponent.y);
-            rotationComponent.SetRandomRotationZ(90f);
+
+            rotationComponent.SetRotation(90f, 0f, 0f);
+            rotationComponent.SetRandomRotationZ();
+        }
+
+        public void PlayPickupAnimation()
+        {
+            Log.Write("HUZZAH");
         }
     }
 }

@@ -6,7 +6,7 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class RoomAwarenessComponent : Component
     {
-        private RoomData currentRoomData;
+        private RoomDataComponent currentRoomDataComponent;
         private GridPositionComponent gridPositionComponent;
 
         protected override void OnStart()
@@ -14,9 +14,9 @@ namespace DungeonCrawler.EntityComponents.Components
             gridPositionComponent = GetComponent<GridPositionComponent>();
         }
 
-        public void EnterRoom(RoomData roomData)
+        public void EnterRoom(RoomDataComponent roomDataComponent)
         {
-            currentRoomData = roomData;
+            currentRoomDataComponent = roomDataComponent;
         }
 
         public bool CanWalk(MovementInputEventArgs e)
@@ -35,17 +35,19 @@ namespace DungeonCrawler.EntityComponents.Components
                     break;
             }
 
-            if (targetX < 0 || targetX >= currentRoomData.gridSizeX)
+            RoomData roomData = currentRoomDataComponent.roomData;
+
+            if (targetX < 0 || targetX >= roomData.gridSizeX)
             {
                 return false;
             }
 
-            if (targetY < 0 || targetY >= currentRoomData.gridSizeY)
+            if (targetY < 0 || targetY >= roomData.gridSizeY)
             {
                 return false;
             }
 
-            TileData targetTileData = currentRoomData.tiles[targetX, targetY];
+            TileData targetTileData = roomData.tiles[targetX, targetY];
 
             return IsTargetTileAccessible(targetTileData);
 
@@ -68,6 +70,24 @@ namespace DungeonCrawler.EntityComponents.Components
                 default:
                     return true;
             }
+        }
+
+        public bool GetRoomCardAtGridLocation(int x, int y, out RoomCardDataComponent cardDataComponent)
+        {
+            for (int i = 0; i < currentRoomDataComponent.roomCardDataComponents.Count; i++)
+            {
+                RoomCardDataComponent roomCardDataComponent = currentRoomDataComponent.roomCardDataComponents[i];
+                GridPositionComponent cardGridPositionComponent = roomCardDataComponent.GetComponent<GridPositionComponent>();
+
+                if (cardGridPositionComponent.x == x && cardGridPositionComponent.y == y)
+                {
+                    cardDataComponent = roomCardDataComponent;
+                    return true;
+                }
+            }
+
+            cardDataComponent = null;
+            return false;
         }
     }
 }

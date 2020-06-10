@@ -20,13 +20,19 @@ namespace DungeonCrawler.Gameplay.States
         {
             gameplayEntityFactory = new GameplayEntityFactory();
 
+            // Get room builder component from level entity
             RoomBuilderComponent roomBuilderComponent = entityRegister.FindEntity("LevelEntity").GetComponent<RoomBuilderComponent>();
+
+            // Get last indexed room data, this is the room that was most recently created by the room builder
             RoomDataComponent roomDataComponent = roomBuilderComponent.rooms[roomBuilderComponent.rooms.Count - 1];
+
+            // Find all doorway tiles
             TileDataComponent[] doorwayTiles = roomDataComponent.GetTiles(TileState.Doorway);
 
+            // Create all room cards based on doorway tiles
             for (int i = 0; i < doorwayTiles.Length; i++)
             {
-                CreateRoomCards(doorwayTiles[i]);
+                CreateRoomCards(roomDataComponent, doorwayTiles[i]);
             }
 
             // TODO: Create tile cards too...
@@ -39,25 +45,33 @@ namespace DungeonCrawler.Gameplay.States
             gameplayEntityFactory = null;
         }
 
-        private void CreateRoomCards(TileDataComponent tileDataComponent)
+        private void CreateRoomCards(RoomDataComponent roomDataComponent, TileDataComponent tileDataComponent)
         {
+            // Create new card entity
             Entity cardEntity = gameplayEntityFactory.Instantiate("RoomCardEntity");
 
             // TODO: Get random card from once card decks are built
+            // Get a random room card
             CardDataCollection<RoomCardData> collection = new CardDataLoader<RoomCardData, RoomCardDataConfig>().Load();
             List<RoomCardData> cards = collection.cards.ToList();
-            cards.RemoveAt(0); // Remove initial room, temp solution...
 
+            // Get random index
             int index = UnityEngine.Random.Range(0, cards.Count);
             RoomCardData cardData = cards[index];
 
-            cardEntity.GetComponent<RoomCardDataComponent>().SetData(cardData);
+            // Set the room card data component's data
+            RoomCardDataComponent roomCardDataComponent = cardEntity.GetComponent<RoomCardDataComponent>();
+            roomCardDataComponent.SetData(cardData);
 
-            GridPositionComponent tilePositionComponent = tileDataComponent.GetComponent<GridPositionComponent>();
-            GridPositionComponent cardPositionComponent = cardEntity.GetComponent<GridPositionComponent>();
+            // Set card's grid position values to the tile's position values it is placed on
+            GridPositionComponent tileGridPositionComponent = tileDataComponent.GetComponent<GridPositionComponent>();
+            GridPositionComponent cardGridPositionComponent = cardEntity.GetComponent<GridPositionComponent>();
+            cardGridPositionComponent.SetPosition(tileGridPositionComponent.x, tileGridPositionComponent.y);
 
-            cardPositionComponent.SetPosition(tilePositionComponent.x, tilePositionComponent.y);
+            // Store the room card data component in it's room's data
+            roomDataComponent.AddRoomCard(roomCardDataComponent);
 
+            // Load card visuals
             CardViewComponent cardViewComponent = cardEntity.GetComponent<CardViewComponent>();
             cardViewComponent.Load();
         }

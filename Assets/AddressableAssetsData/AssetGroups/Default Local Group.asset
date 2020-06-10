@@ -17,13 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: fe669acc693ce984dab485cf68eb428e
   m_SerializeEntries:
-  - m_GUID: 18bcb08b9a3d2564ca86f4f7d668eda2
-    m_Address: TileDoorwayMaterial
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
   - m_GUID: 2b0bd286e9185e948a63f378d0f723e2
     m_Address: MovementInputManager
     m_ReadOnly: 0
@@ -50,8 +43,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+    m_MainAsset: {fileID: 2100000, guid: 653b3c3ac21f705438308e2f99e946d4, type: 2}
+    m_TargetAsset: {fileID: 2100000, guid: 653b3c3ac21f705438308e2f99e946d4, type: 2}
   - m_GUID: bc1da833522584545948495cefe4b4db
     m_Address: Tile
     m_ReadOnly: 0

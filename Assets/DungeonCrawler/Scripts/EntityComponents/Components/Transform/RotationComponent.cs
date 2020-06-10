@@ -44,28 +44,27 @@ namespace DungeonCrawler.EntityComponents.Components
             SetRotation(UnityEngine.Random.rotation);
         }
 
-        public void SetRandomRotationX(float y = 0f, float z = 0f)
+        public void SetRandomRotationX()
         {
             UnityEngine.Quaternion randomRotation = UnityEngine.Random.rotation;
-            UnityEngine.Vector3 euler = new UnityEngine.Vector3(randomRotation.eulerAngles.x, y, z);
-
-            SetRotation(euler);
+            UnityEngine.Vector3 eulerAngles = new UnityEngine.Vector3(randomRotation.eulerAngles.x, euler.y, euler.z);
+            SetRotation(eulerAngles);
         }
 
-        public void SetRandomRotationY(float x = 0f, float z = 0f)
+        public void SetRandomRotationY()
         {
             UnityEngine.Quaternion randomRotation = UnityEngine.Random.rotation;
-            UnityEngine.Vector3 euler = new UnityEngine.Vector3(x, randomRotation.eulerAngles.y, z);
+            UnityEngine.Vector3 eulerAngles = new UnityEngine.Vector3(euler.x, randomRotation.eulerAngles.y, euler.z);
 
-            SetRotation(euler);
+            SetRotation(eulerAngles);
         }
 
-        public void SetRandomRotationZ(float x = 0f, float y = 0f)
+        public void SetRandomRotationZ()
         {
             UnityEngine.Quaternion randomRotation = UnityEngine.Random.rotation;
-            UnityEngine.Vector3 euler = new UnityEngine.Vector3(x, y, randomRotation.eulerAngles.z);
+            UnityEngine.Vector3 eulerAngles = new UnityEngine.Vector3(euler.x, euler.y, randomRotation.eulerAngles.z);
 
-            SetRotation(euler);
+            SetRotation(eulerAngles);
         }
     }
 }

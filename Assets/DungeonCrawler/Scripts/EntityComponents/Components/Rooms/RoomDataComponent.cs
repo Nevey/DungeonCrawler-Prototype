@@ -10,7 +10,18 @@ namespace DungeonCrawler.EntityComponents.Components
     public class RoomDataComponent : Component
     {
         private GameplayEntityFactory gameplayEntityFactory;
+
+        /// <summary>
+        /// List of all tiles in this room
+        /// </summary>
+        /// <value></value>
         public List<TileDataComponent> tileDataComponents { get; private set; }
+
+        /// <summary>
+        /// List of all cards in this room
+        /// </summary>
+        /// <value></value>
+        public List<RoomCardDataComponent> roomCardDataComponents { get; private set; }
 
         public RoomData roomData { get; private set; }
 
@@ -19,6 +30,7 @@ namespace DungeonCrawler.EntityComponents.Components
             gameplayEntityFactory = new GameplayEntityFactory();
 
             tileDataComponents = new List<TileDataComponent>();
+            roomCardDataComponents = new List<RoomCardDataComponent>();
         }
 
         public void SetRoomData(RoomData roomData)
@@ -52,6 +64,11 @@ namespace DungeonCrawler.EntityComponents.Components
             int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
 
             return tiles[randomIndex];
+        }
+
+        public void AddRoomCard(RoomCardDataComponent roomCardDataComponent)
+        {
+            roomCardDataComponents.Add(roomCardDataComponent);
         }
     }
 }
