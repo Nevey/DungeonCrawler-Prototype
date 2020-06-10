@@ -1,5 +1,5 @@
+using System;
 using CardboardCore.EntityComponents;
-using CardboardCore.Utilities;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
@@ -9,6 +9,8 @@ namespace DungeonCrawler.EntityComponents.Components
         private HoppingPositionComponent hoppingPositionComponent;
         private RoomAwarenessComponent roomAwarenessComponent;
         private MovementInputComponent movementInputComponent;
+
+        public event Action<CardDataComponent> CardPickedUpEvent;
 
         protected override void OnStart()
         {
@@ -34,6 +36,8 @@ namespace DungeonCrawler.EntityComponents.Components
 
                 CardViewComponent cardViewComponent = roomCardDataComponent.GetComponent<CardViewComponent>();
                 cardViewComponent.PlayPickupAnimation();
+
+                CardPickedUpEvent?.Invoke(roomCardDataComponent);
             }
         }
     }

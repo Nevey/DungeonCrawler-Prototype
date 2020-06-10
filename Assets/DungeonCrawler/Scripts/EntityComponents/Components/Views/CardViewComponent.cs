@@ -34,9 +34,14 @@ namespace DungeonCrawler.EntityComponents.Components
             rotationComponent.SetRandomRotationZ();
         }
 
+
+
         public void PlayPickupAnimation()
         {
-            Log.Write("HUZZAH");
+            // camera focus on card
+            // move up and rotate to 0 0 0
+            // rotate towards camera
+            // move to camera
         }
     }
 }

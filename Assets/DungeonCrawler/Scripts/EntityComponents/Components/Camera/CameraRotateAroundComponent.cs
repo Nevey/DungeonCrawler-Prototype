@@ -27,9 +27,9 @@ namespace DungeonCrawler.EntityComponents.Components
             cameraTargetComponent.TargetUpdatedEvent -= OnCameraTargetUpdated;
         }
 
-        private void OnCameraTargetUpdated(PositionComponent obj)
+        private void OnCameraTargetUpdated(PositionComponent positionComponent)
         {
-            SetPosition(obj);
+            SetPosition(positionComponent);
         }
 
         protected override void OnUpdate(float deltaTime)
@@ -52,8 +52,9 @@ namespace DungeonCrawler.EntityComponents.Components
 
             UnityEngine.Vector3 offset = new UnityEngine.Vector3(0f, 4.5f, 5f);
             UnityEngine.Vector3 relativePosition = RotationUtil.GetVectorSimple(0f, rotation, 0f, offset);
+            UnityEngine.Vector3 targetPosition = target.position + relativePosition;
 
-            positionComponent.SetPosition(target.position + relativePosition);
+            positionComponent.SetPositionAnimated(targetPosition);
         }
     }
 }

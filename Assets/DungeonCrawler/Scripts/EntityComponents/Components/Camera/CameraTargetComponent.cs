@@ -1,11 +1,15 @@
 using System;
 using CardboardCore.EntityComponents;
+using DG.Tweening;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
     public class CameraTargetComponent : Component
     {
         private CameraViewComponent cameraViewComponent;
+
+        private Tween tween;
+        private UnityEngine.Vector3 currentTargetPosition;
 
         public PositionComponent target { get; private set; }
 
@@ -23,12 +27,18 @@ namespace DungeonCrawler.EntityComponents.Components
                 return;
             }
 
-            cameraViewComponent.LookAt(target);
+            cameraViewComponent.LookAt(currentTargetPosition);
         }
 
         public void SetTarget(PositionComponent target)
         {
             this.target = target;
+
+            tween?.Kill();
+            tween = DOTween.To(() => currentTargetPosition, x => currentTargetPosition = x, target.position, 1f);
+            tween.SetEase(Ease.InOutQuad);
+            tween.Play();
+
             TargetUpdatedEvent?.Invoke(target);
         }
 

@@ -98,7 +98,12 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public void LookAt(PositionComponent positionComponent)
         {
-            gameObject.transform.LookAt(positionComponent.position);
+            LookAt(positionComponent.position);
+        }
+
+        public void LookAt(UnityEngine.Vector3 target)
+        {
+            gameObject.transform.LookAt(target);
 
             // TODO: Create own LookAt code, so we don't have to do weird stuff like this
             rotationComponent.SetRotation(gameObject.transform.rotation, true);

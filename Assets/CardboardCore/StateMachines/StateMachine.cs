@@ -10,7 +10,7 @@ namespace CardboardCore.StateMachines
     /// </summary>
     public abstract class StateMachine
     {
-        private Dictionary<Type, State> stateDict =
+        protected Dictionary<Type, State> stateDict =
             new Dictionary<Type, State>();
 
         private Dictionary<State, KeyValuePair<State, Transition>> transitionDict =
@@ -129,7 +129,7 @@ namespace CardboardCore.StateMachines
         /// <typeparam name="TFrom"></typeparam>
         /// <typeparam name="TTo"></typeparam>
         /// <returns></returns>
-        protected void AddTransition<TFrom, TTo>()
+        protected TTo AddTransition<TFrom, TTo>()
             where TFrom : State, new()
             where TTo : State, new()
         {
@@ -142,13 +142,15 @@ namespace CardboardCore.StateMachines
                 transition = new Transition(from, to);
                 transitionDict[from] = new KeyValuePair<State, Transition>(to, transition);
             }
+
+            return to as TTo;
         }
 
         /// <summary>
         /// Set the initial State for the start of the State Machine
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        protected void SetInitialState<T>()
+        protected T SetInitialState<T>()
             where T : State, new()
         {
             initialState = GetState<T>();
@@ -157,6 +159,8 @@ namespace CardboardCore.StateMachines
             {
                 initialState = CreateState<T>();
             }
+
+            return initialState as T;
         }
 
         public void Start()
@@ -168,7 +172,7 @@ namespace CardboardCore.StateMachines
 
             currentState = initialState ?? throw Log.Exception("Initial State is null!");
             currentState.Enter();
-            
+
             StartedEvent?.Invoke();
         }
 
@@ -181,7 +185,7 @@ namespace CardboardCore.StateMachines
 
             currentState.Exit();
             currentState = null;
-            
+
             StoppedEvent?.Invoke();
         }
 
