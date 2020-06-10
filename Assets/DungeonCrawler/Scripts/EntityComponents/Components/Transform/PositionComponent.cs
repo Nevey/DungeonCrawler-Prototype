@@ -29,20 +29,21 @@ namespace DungeonCrawler.EntityComponents.Components
             DispatchPositionUpdatedEvent();
         }
 
-        public void SetPositionAnimated(UnityEngine.Vector3 targetPosition)
+        public Tween SetPositionAnimated(UnityEngine.Vector3 targetPosition, float duration = 1f, Ease ease = Ease.InOutQuad)
         {
             movementTween?.Kill();
-            movementTween = DOTween.To(() => position, x => position = x, targetPosition, 1f);
-            movementTween.SetEase(Ease.InOutQuad);
+            movementTween = DOTween.To(() => position, x => position = x, targetPosition, duration);
+            movementTween.SetEase(ease);
             movementTween.OnUpdate(DispatchPositionUpdatedEvent);
             movementTween.Play();
+
+            return movementTween;
         }
 
-        public void SetPositionAnimated(float x, float y, float z)
+        public Tween SetPositionAnimated(float x, float y, float z, float duration = 1f, Ease ease = Ease.InOutQuad)
         {
             UnityEngine.Vector3 targetPosition = new UnityEngine.Vector3(x, y, z);
-            SetPositionAnimated(targetPosition);
-
+            return SetPositionAnimated(targetPosition, duration, ease);
         }
     }
 }

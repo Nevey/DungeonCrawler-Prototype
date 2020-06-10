@@ -1,10 +1,13 @@
 using System;
 using CardboardCore.EntityComponents;
+using DG.Tweening;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
     public class RotationComponent : Component
     {
+        private Tween rotationTween;
+
         public UnityEngine.Quaternion rotation { get; private set; }
         public UnityEngine.Vector3 euler => rotation.eulerAngles;
 
@@ -65,6 +68,29 @@ namespace DungeonCrawler.EntityComponents.Components
             UnityEngine.Vector3 eulerAngles = new UnityEngine.Vector3(euler.x, euler.y, randomRotation.eulerAngles.z);
 
             SetRotation(eulerAngles);
+        }
+
+        public Tween SetRotationAnimated(UnityEngine.Vector3 targetEuler, float duration = 1f, Ease ease = Ease.InOutQuad)
+        {
+            rotationTween?.Kill();
+            rotationTween = DOTween.To(() => rotation, x => rotation = x, targetEuler, duration);
+            rotationTween.SetEase(ease);
+            rotationTween.OnUpdate(DispatchRotationUpdatedEvent);
+            rotationTween.Play();
+
+            return rotationTween;
+        }
+
+        public Tween SetRotationAnimated(UnityEngine.Quaternion rotation, float duration = 1f, Ease ease = Ease.InOutQuad)
+        {
+            UnityEngine.Vector3 targetEuler = rotation.eulerAngles;
+            return SetRotationAnimated(targetEuler, duration, ease);
+        }
+
+        public Tween SetRotationAnimated(int x, int y, int z, float duration = 1f, Ease ease = Ease.InOutQuad)
+        {
+            UnityEngine.Vector3 targetEuler = new UnityEngine.Vector3(x, y, z);
+            return SetRotationAnimated(targetEuler, duration, ease);
         }
     }
 }

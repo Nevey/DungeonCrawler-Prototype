@@ -32,11 +32,6 @@ namespace DungeonCrawler.EntityComponents.Components
             if (roomAwarenessComponent.GetRoomCardAtGridLocation(gridPositionComponent.x, gridPositionComponent.y,
                 out RoomCardDataComponent roomCardDataComponent))
             {
-                movementInputComponent.Lock();
-
-                CardViewComponent cardViewComponent = roomCardDataComponent.GetComponent<CardViewComponent>();
-                cardViewComponent.PlayPickupAnimation();
-
                 CardPickedUpEvent?.Invoke(roomCardDataComponent);
             }
         }

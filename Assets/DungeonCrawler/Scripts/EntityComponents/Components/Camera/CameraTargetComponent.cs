@@ -30,22 +30,23 @@ namespace DungeonCrawler.EntityComponents.Components
             cameraViewComponent.LookAt(currentTargetPosition);
         }
 
-        public void SetTarget(PositionComponent target)
+        public void SetTarget(PositionComponent target, TweenCallback callback = null)
         {
             this.target = target;
 
             tween?.Kill();
             tween = DOTween.To(() => currentTargetPosition, x => currentTargetPosition = x, target.position, 1f);
             tween.SetEase(Ease.InOutQuad);
+            tween.OnComplete(callback);
             tween.Play();
 
             TargetUpdatedEvent?.Invoke(target);
         }
 
-        public void SetTarget(Entity entity)
+        public void SetTarget(Entity entity, TweenCallback callback = null)
         {
             PositionComponent positionComponent = entity.GetComponent<PositionComponent>(true);
-            SetTarget(positionComponent);
+            SetTarget(positionComponent, callback);
         }
     }
 }
