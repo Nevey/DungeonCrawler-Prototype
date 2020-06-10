@@ -10,10 +10,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public TileData Data => tileData;
 
-        public TileDataComponent(Entity owner) : base(owner)
-        {
-        }
-
         public void SetData(RoomData roomData, TileData tileData)
         {
             parentRoom = roomData;

@@ -16,10 +16,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action<ViewComponent> LoadFinishedEvent;
 
-        public ViewComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             positionComponent = GetComponent<PositionComponent>();

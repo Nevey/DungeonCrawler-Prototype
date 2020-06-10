@@ -5,28 +5,41 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class CameraRotateAroundComponent : Component
     {
+        [TweakableField] private float rotation;
+        [TweakableField] private bool isRotating;
+        [TweakableField] private float rotationSpeed;
+
         private CameraTargetComponent cameraTargetComponent;
         private PositionComponent positionComponent;
         private RotationComponent rotationComponent;
 
-        private float rotation;
-
-        public CameraRotateAroundComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             cameraTargetComponent = GetComponent<CameraTargetComponent>();
+            cameraTargetComponent.TargetUpdatedEvent += OnCameraTargetUpdated;
 
             positionComponent = GetComponent<PositionComponent>();
             rotationComponent = GetComponent<RotationComponent>();
         }
 
+        protected override void OnStop()
+        {
+            cameraTargetComponent.TargetUpdatedEvent -= OnCameraTargetUpdated;
+        }
+
+        private void OnCameraTargetUpdated(PositionComponent obj)
+        {
+            SetPosition(obj);
+        }
+
         protected override void OnUpdate(float deltaTime)
         {
-            rotation += 10f * deltaTime;
+            if (!isRotating)
+            {
+                return;
+            }
 
+            rotation += rotationSpeed * deltaTime;
             SetPosition(cameraTargetComponent.target);
         }
 

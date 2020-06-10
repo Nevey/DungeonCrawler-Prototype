@@ -11,10 +11,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         private TileDataComponent tileDataComponent;
 
-        public TileViewComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             base.OnStart();

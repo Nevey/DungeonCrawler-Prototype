@@ -23,7 +23,10 @@ namespace CardboardCore.EntityComponents
 
                 Type type = Reflection.GetType(componentData.id);
 
-                Component component = Activator.CreateInstance(type, this) as Component;
+                Component component = Activator.CreateInstance(type) as Component;
+
+                FieldInfo ownerField = Reflection.GetFieldWithName(component, "owner");
+                ownerField.SetValue(component, this);
 
                 FieldInfo[] fieldInfos = Reflection.GetFieldsWithAttribute<TweakableFieldAttribute>(type);
 

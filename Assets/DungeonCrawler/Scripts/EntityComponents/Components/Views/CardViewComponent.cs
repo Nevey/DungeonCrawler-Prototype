@@ -6,10 +6,6 @@ namespace DungeonCrawler.EntityComponents.Components
     {
         private GridPositionComponent gridPositionComponent;
 
-        public CardViewComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             base.OnStart();

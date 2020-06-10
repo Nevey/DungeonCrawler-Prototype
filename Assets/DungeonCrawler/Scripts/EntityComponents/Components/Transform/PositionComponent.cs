@@ -9,10 +9,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action<UnityEngine.Vector3> PositionUpdatedEvent;
 
-        public PositionComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected void DispatchPositionUpdatedEvent()
         {
             PositionUpdatedEvent?.Invoke(position);

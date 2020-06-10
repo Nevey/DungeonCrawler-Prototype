@@ -6,13 +6,10 @@ namespace DungeonCrawler.EntityComponents.Components
     public class CameraTargetComponent : Component
     {
         private CameraViewComponent cameraViewComponent;
+
         public PositionComponent target { get; private set; }
 
         public event Action<PositionComponent> TargetUpdatedEvent;
-
-        public CameraTargetComponent(Entity owner) : base(owner)
-        {
-        }
 
         protected override void OnStart()
         {

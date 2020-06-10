@@ -13,10 +13,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action MovementAnimationFinishedEvent;
 
-        public HoppingPositionComponent(Entity owner) : base(owner)
-        {
-        }
-
         public void HopToPosition(float x, float y, float z, float duration, TweenCallback callback)
         {
             UnityEngine.Vector3 targetPosition = new UnityEngine.Vector3(x, y, z);

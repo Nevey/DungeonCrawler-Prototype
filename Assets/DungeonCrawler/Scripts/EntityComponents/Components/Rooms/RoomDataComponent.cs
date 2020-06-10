@@ -14,10 +14,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public RoomData roomData { get; private set; }
 
-        public RoomDataComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             gameplayEntityFactory = new GameplayEntityFactory();

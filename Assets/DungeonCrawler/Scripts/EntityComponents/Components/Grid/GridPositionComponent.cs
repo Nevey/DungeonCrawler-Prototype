@@ -10,10 +10,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action<int, int> PositionUpdatedEvent;
 
-        public GridPositionComponent(Entity owner) : base(owner)
-        {
-        }
-
         private void DispatchPositionUpdatedEvent()
         {
             PositionUpdatedEvent?.Invoke(x, y);

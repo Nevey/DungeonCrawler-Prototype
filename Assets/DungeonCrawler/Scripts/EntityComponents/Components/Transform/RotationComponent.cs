@@ -10,10 +10,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action<UnityEngine.Quaternion> RotationUpdatedEvent;
 
-        public RotationComponent(Entity owner) : base(owner)
-        {
-        }
-
         private void DispatchRotationUpdatedEvent()
         {
             RotationUpdatedEvent?.Invoke(rotation);

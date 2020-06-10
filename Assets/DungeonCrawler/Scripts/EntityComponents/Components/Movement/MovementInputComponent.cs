@@ -26,10 +26,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         private bool bindInputOnceLoaded;
 
-        public MovementInputComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             Injector.Inject(this);

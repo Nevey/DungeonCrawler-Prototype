@@ -9,10 +9,6 @@ namespace DungeonCrawler.EntityComponents.Components
         private RoomData currentRoomData;
         private GridPositionComponent gridPositionComponent;
 
-        public RoomAwarenessComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             gridPositionComponent = GetComponent<GridPositionComponent>();

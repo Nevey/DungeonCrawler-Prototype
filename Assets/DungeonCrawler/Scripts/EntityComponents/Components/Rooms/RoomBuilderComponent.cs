@@ -16,10 +16,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action<RoomDataComponent> LevelBuildingFinishedEvent;
 
-        public RoomBuilderComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             gameplayEntityFactory = new GameplayEntityFactory();

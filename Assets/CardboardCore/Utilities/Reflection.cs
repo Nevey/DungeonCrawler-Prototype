@@ -171,6 +171,23 @@ namespace CardboardCore.Utilities
             return fieldInfoList.ToArray();
         }
 
+        public static FieldInfo GetFieldWithName(object obj, string name)
+        {
+            Type type = obj.GetType();
+
+            FieldInfo[] fields = GetFields(type);
+
+            foreach (FieldInfo fieldInfo in fields)
+            {
+                if (fieldInfo.Name.Equals(name))
+                {
+                    return fieldInfo;
+                }
+            }
+
+            return null;
+        }
+
         public static FieldInfo[] GetFields(Type type)
         {
             return type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);

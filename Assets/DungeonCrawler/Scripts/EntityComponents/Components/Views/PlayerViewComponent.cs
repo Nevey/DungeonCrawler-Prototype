@@ -12,10 +12,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public event Action MovementFinishedEvent;
 
-        public PlayerViewComponent(Entity owner) : base(owner)
-        {
-        }
-
         protected override void OnStart()
         {
             base.OnStart();

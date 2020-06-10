@@ -6,12 +6,6 @@ namespace CardboardCore.EntityComponents
     {
         public readonly Entity owner;
 
-        public Component(Entity owner)
-        {
-            // TODO: Set owner via reflection instead
-            this.owner = owner;
-        }
-
         public void Start()
         {
             Injector.Inject(this);
