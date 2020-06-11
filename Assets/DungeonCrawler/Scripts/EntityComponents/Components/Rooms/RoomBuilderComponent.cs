@@ -22,10 +22,10 @@ namespace DungeonCrawler.EntityComponents.Components
             rooms = new List<RoomDataComponent>();
         }
 
-        private void CreateBase(RoomData roomData, string key, UnityEngine.Vector3 position)
+        private void CreateRoomBase(RoomData roomData, UnityEngine.Vector3 position)
         {
             // Create the room entity
-            Entity roomEntity = gameplayEntityFactory.Instantiate(key);
+            Entity roomEntity = gameplayEntityFactory.Instantiate("RoomEntity");
 
             currentlyBuildingRoom = roomEntity.GetComponent<RoomDataComponent>();
             currentlyBuildingRoom.SetRoomData(roomData);
@@ -41,6 +41,24 @@ namespace DungeonCrawler.EntityComponents.Components
 
             // Add current room data component to rooms list for future access
             rooms.Add(currentlyBuildingRoom);
+        }
+
+        private void SetupTotalTileViewsToLoad()
+        {
+            // Find amount of tile views we need to load
+            totalTileViewsToLoad = 0;
+            for (int x = 0; x < currentlyBuildingRoom.roomData.gridSizeX; x++)
+            {
+                for (int y = 0; y < currentlyBuildingRoom.roomData.gridSizeY; y++)
+                {
+                    TileData tileData = currentlyBuildingRoom.roomData.tiles[x, y];
+
+                    if (tileData.tileState == TileState.Default || tileData.tileState == TileState.Doorway)
+                    {
+                        totalTileViewsToLoad++;
+                    }
+                }
+            }
         }
 
         private void CreateRoomTiles()
@@ -107,31 +125,18 @@ namespace DungeonCrawler.EntityComponents.Components
             }
         }
 
-        private void SetupTotalTileViewsToLoad()
+        public void CreateRoom(int id, UnityEngine.Vector3? position = null)
         {
-            // Find amount of tile views we need to load
-            totalTileViewsToLoad = 0;
-            for (int x = 0; x < currentlyBuildingRoom.roomData.gridSizeX; x++)
-            {
-                for (int y = 0; y < currentlyBuildingRoom.roomData.gridSizeY; y++)
-                {
-                    TileData tileData = currentlyBuildingRoom.roomData.tiles[x, y];
-
-                    if (tileData.tileState == TileState.Default || tileData.tileState == TileState.Doorway)
-                    {
-                        totalTileViewsToLoad++;
-                    }
-                }
-            }
-        }
-
-        public void CreateRoom(int id, string key = "RoomEntity", UnityEngine.Vector3? position = null)
-        {
-            position = position == null ? position = UnityEngine.Vector3.zero : position;
-
+            // Load room data based on given id
             RoomData roomData = new RoomDataLoader().Load(id);
 
-            CreateBase(roomData, key, position.Value);
+            // Get position
+            position = position == null ? position = UnityEngine.Vector3.zero : position;
+
+            // Create base room
+            CreateRoomBase(roomData, position.Value);
+
+            // Create room tiles
             CreateRoomTiles();
         }
 
@@ -165,7 +170,7 @@ namespace DungeonCrawler.EntityComponents.Components
             UnityEngine.Vector3 position = new UnityEngine.Vector3(x, 0f, y);
 
             // Create base room
-            CreateBase(roomData, "CorridorEntity", position);
+            CreateRoomBase(roomData, position);
 
             // Create corridor tiles
             CreateCorridorTiles(x, y, corridorLength, spawnDirection);
