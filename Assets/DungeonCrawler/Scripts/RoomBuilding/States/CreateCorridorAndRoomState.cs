@@ -1,11 +1,11 @@
-using CardboardCore.DI;
+﻿using CardboardCore.DI;
 using CardboardCore.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 using UnityEngine;
 
 namespace DungeonCrawler.RoomBuilding.States
 {
-    public class CreateCorridorState : RoomBuilderState
+    public class CreateCorridorAndRoomState : RoomBuilderState
     {
         [Inject] private EntityRegister entityRegister;
 
