@@ -14,8 +14,9 @@ namespace DungeonCrawler.RoomBuilding.States
             Entity levelEntity = entityRegister.FindEntity("LevelEntity");
 
             RoomBuilderComponent roomBuilderComponent = levelEntity.GetComponent<RoomBuilderComponent>();
+            CorridorBuilderComponent corridorBuilderComponent = levelEntity.GetComponent<CorridorBuilderComponent>();
 
-            if (roomBuilderComponent.CreateCorridor(currentRoom, x, y, out Vector3 spawnOffset, out Vector2Int spawnDirection))
+            if (corridorBuilderComponent.CreateCorridor(currentRoom, x, y, out Vector3 spawnOffset, out Vector2Int spawnDirection))
             {
                 roomBuilderComponent.CreateRoom(roomCardDataComponent.GetCardData().id, spawnOffset, spawnDirection);
             }

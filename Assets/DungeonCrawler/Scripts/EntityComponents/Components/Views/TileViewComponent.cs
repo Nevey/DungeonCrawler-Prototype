@@ -6,8 +6,10 @@ namespace DungeonCrawler.EntityComponents.Components
     public class TileViewComponent : ViewComponent
     {
         [TweakableField] private float spawnAnimationDelay;
+        [TweakableField] private float spawnAnimationDuration;
 
         private TileDataComponent tileDataComponent;
+        private Tween scaleTween;
 
         protected override void OnStart()
         {
@@ -26,23 +28,29 @@ namespace DungeonCrawler.EntityComponents.Components
             base.Load();
         }
 
-        private void OnLoadFinishedEvent(ViewComponent viewComponent)
+        private void ScaleDownOnLoadFinished(ViewComponent viewComponent)
+        {
+            gameObject.transform.localScale = UnityEngine.Vector3.zero;
+            LoadFinishedEvent -= ScaleDownOnLoadFinished;
+        }
+
+        private void PlayAnimationOnLoadFinished(ViewComponent viewComponent)
         {
             PlaySpawnAnimation();
 
-            LoadFinishedEvent -= OnLoadFinishedEvent;
+            LoadFinishedEvent -= PlayAnimationOnLoadFinished;
         }
 
-        private void PlaySpawnAnimation()
+        public void PlaySpawnAnimation()
         {
             gameObject.transform.localScale = UnityEngine.Vector3.zero;
 
-            Tween tween = gameObject.transform.DOScale(1f, 1f);
-            tween.SetDelay(spawnAnimationDelay);
-            tween.Play();
+            scaleTween = gameObject.transform.DOScale(1f, spawnAnimationDuration);
+            scaleTween.SetDelay(spawnAnimationDelay);
+            scaleTween.Play();
         }
 
-        public void SetupSpawnAnimationOnViewLoaded(int index)
+        public void SetupSpawnAnimation(float index)
         {
             if (tileDataComponent.tileData.tileState == Levels.TileState.Unused)
             {
@@ -50,7 +58,18 @@ namespace DungeonCrawler.EntityComponents.Components
             }
 
             spawnAnimationDelay = spawnAnimationDelay * index;
-            LoadFinishedEvent += OnLoadFinishedEvent;
+            LoadFinishedEvent += ScaleDownOnLoadFinished;
+        }
+
+        public void SetupSpawnAnimationOnViewLoaded(float index)
+        {
+            if (tileDataComponent.tileData.tileState == Levels.TileState.Unused)
+            {
+                return;
+            }
+
+            spawnAnimationDelay = spawnAnimationDelay * index;
+            LoadFinishedEvent += PlayAnimationOnLoadFinished;
         }
     }
 }

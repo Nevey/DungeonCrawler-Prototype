@@ -9,7 +9,8 @@ namespace DungeonCrawler.RoomBuilding
         {
             SetInitialState<SpawnCameraState>();
             AddTransition<SpawnCameraState, SpawnInitialRoomState>();
-            AddTransition<SpawnInitialRoomState, SpawnPlayersState>();
+            AddTransition<SpawnInitialRoomState, AnimateRoomState>();
+            AddTransition<AnimateRoomState, SpawnPlayersState>();
             AddTransition<SpawnPlayersState, PlaceCardsState>();
             AddTransition<PlaceCardsState, StopInitialRoomBuildingState>();
         }
