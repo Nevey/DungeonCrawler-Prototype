@@ -142,7 +142,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public void CreateInitialRoom()
         {
-            CreateRoom(2);
+            CreateRoom(0);
         }
 
         public void CreateCorridor(RoomDataComponent currentRoom, int x, int y)
