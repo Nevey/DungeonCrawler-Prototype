@@ -6,17 +6,18 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class RoomAwarenessComponent : Component
     {
-        private RoomDataComponent currentRoomDataComponent;
         private GridPositionComponent gridPositionComponent;
+
+        public RoomDataComponent currentRoom { get; private set; }
 
         protected override void OnStart()
         {
             gridPositionComponent = GetComponent<GridPositionComponent>();
         }
 
-        public void EnterRoom(RoomDataComponent roomDataComponent)
+        public void EnterRoom(RoomDataComponent currentRoom)
         {
-            currentRoomDataComponent = roomDataComponent;
+            this.currentRoom = currentRoom;
         }
 
         public bool CanWalk(MovementInputEventArgs e)
@@ -35,7 +36,7 @@ namespace DungeonCrawler.EntityComponents.Components
                     break;
             }
 
-            RoomData roomData = currentRoomDataComponent.roomData;
+            RoomData roomData = currentRoom.roomData;
 
             if (targetX < 0 || targetX >= roomData.gridSizeX)
             {
@@ -74,9 +75,9 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public bool GetRoomCardAtGridLocation(int x, int y, out RoomCardDataComponent cardDataComponent)
         {
-            for (int i = 0; i < currentRoomDataComponent.roomCardDataComponents.Count; i++)
+            for (int i = 0; i < currentRoom.roomCardDataComponents.Count; i++)
             {
-                RoomCardDataComponent roomCardDataComponent = currentRoomDataComponent.roomCardDataComponents[i];
+                RoomCardDataComponent roomCardDataComponent = currentRoom.roomCardDataComponents[i];
                 GridPositionComponent cardGridPositionComponent = roomCardDataComponent.GetComponent<GridPositionComponent>();
 
                 if (cardGridPositionComponent.x == x && cardGridPositionComponent.y == y)

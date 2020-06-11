@@ -1,4 +1,3 @@
-using System;
 using CardboardCore.EntityComponents;
 using CardboardCore.Utilities;
 using DG.Tweening;
@@ -59,6 +58,13 @@ namespace DungeonCrawler.EntityComponents.Components
             sequence.Insert(0.5f, positionComponent.SetPositionAnimated(targetPositionComponent.position + cardFromTargetRelativePosition, 0.75f));
             sequence.OnComplete(callback);
             sequence.Play();
+        }
+
+        public void PlayPlacementAnimation(TweenCallback callback)
+        {
+            // Get grid position
+            // Find direction of spawn location compared to current grid position
+            // 
         }
     }
 }

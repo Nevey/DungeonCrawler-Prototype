@@ -14,6 +14,8 @@ namespace DungeonCrawler.Gameplay.States
 
         private MovementInputComponent movementInputComponent;
         private CardPickupComponent cardPickupComponent;
+        private RoomAwarenessComponent roomAwarenessComponent;
+        private GridPositionComponent gridPositionComponent;
 
         protected override void OnEnter()
         {
@@ -26,6 +28,9 @@ namespace DungeonCrawler.Gameplay.States
             movementInputComponent.SetMovementActionSetController(inputManager.movementActionSetController);
             movementInputComponent.SetGameplayCameraEntity(entityRegister.FindEntity("GameplayCameraEntity"));
             movementInputComponent.EnableInput();
+
+            roomAwarenessComponent = playerEntity.GetComponent<RoomAwarenessComponent>();
+            gridPositionComponent = playerEntity.GetComponent<GridPositionComponent>();
 
             cardPickupComponent = playerEntity.GetComponent<CardPickupComponent>();
             cardPickupComponent.CardPickedUpEvent += OnCardPickedUp;
@@ -43,7 +48,12 @@ namespace DungeonCrawler.Gameplay.States
 
             if (cardDataComponent is RoomCardDataComponent roomCardDataComponent)
             {
-                RoomBuilderStateMachine roomBuilderStateMachine = new RoomBuilderStateMachine(roomCardDataComponent);
+                RoomBuilderStateMachine roomBuilderStateMachine = new RoomBuilderStateMachine(
+                    roomAwarenessComponent.currentRoom,
+                    roomCardDataComponent,
+                    gridPositionComponent.x,
+                    gridPositionComponent.y);
+
                 roomBuilderStateMachine.Start();
             }
         }

@@ -1,13 +1,11 @@
 using CardboardCore.EntityComponents;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using DG.Tweening;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
     public class TileViewComponent : ViewComponent
     {
-        [TweakableField] private string doorwayMaterialKey;
+        [TweakableField] private float spawnAnimationDelay;
 
         private TileDataComponent tileDataComponent;
 
@@ -26,6 +24,33 @@ namespace DungeonCrawler.EntityComponents.Components
             }
 
             base.Load();
+        }
+
+        private void OnLoadFinishedEvent(ViewComponent viewComponent)
+        {
+            PlaySpawnAnimation();
+
+            LoadFinishedEvent -= OnLoadFinishedEvent;
+        }
+
+        private void PlaySpawnAnimation()
+        {
+            gameObject.transform.localScale = UnityEngine.Vector3.zero;
+
+            Tween tween = gameObject.transform.DOScale(1f, 1f);
+            tween.SetDelay(spawnAnimationDelay);
+            tween.Play();
+        }
+
+        public void SetupSpawnAnimationOnViewLoaded(int index)
+        {
+            if (tileDataComponent.Data.tileState == Levels.TileState.Unused)
+            {
+                return;
+            }
+
+            spawnAnimationDelay = spawnAnimationDelay * index;
+            LoadFinishedEvent += OnLoadFinishedEvent;
         }
     }
 }

@@ -66,6 +66,86 @@ namespace DungeonCrawler.EntityComponents.Components
             return tiles[randomIndex];
         }
 
+        public TileData[] GetSurroundingTiles(int x, int y)
+        {
+            int right = x + 1;
+            int left = x - 1;
+            int up = y + 1;
+            int down = y - 1;
+
+            List<TileData> tiles = new List<TileData>();
+
+            if (right < roomData.gridSizeX)
+            {
+                tiles.Add(roomData.tiles[right, y]);
+            }
+
+            if (left >= 0)
+            {
+                tiles.Add(roomData.tiles[left, y]);
+            }
+
+            if (up < roomData.gridSizeY)
+            {
+                tiles.Add(roomData.tiles[x, up]);
+            }
+
+            if (down >= 0)
+            {
+                tiles.Add(roomData.tiles[x, down]);
+            }
+
+            return tiles.ToArray();
+        }
+
+        public TileData[] GetSurroundingTiles(int x, int y, TileState tileState)
+        {
+            List<TileData> tiles = new List<TileData>();
+            TileData[] surroundingTiles = GetSurroundingTiles(x, y);
+
+            foreach (TileData tile in surroundingTiles)
+            {
+                if (tile.tileState == tileState)
+                {
+                    tiles.Add(tile);
+                }
+            }
+
+            return tiles.ToArray();
+        }
+
+        public UnityEngine.Vector2Int[] GetPotentialSpawnLocations(int x, int y)
+        {
+            List<UnityEngine.Vector2Int> locations = new List<UnityEngine.Vector2Int>();
+
+            int right = x + 1;
+            int left = x - 1;
+            int up = y + 1;
+            int down = y - 1;
+
+            if (right > roomData.gridSizeX - 1)
+            {
+                locations.Add(new UnityEngine.Vector2Int(right, y));
+            }
+
+            if (left < 0)
+            {
+                locations.Add(new UnityEngine.Vector2Int(left, y));
+            }
+
+            if (up > roomData.gridSizeY - 1)
+            {
+                locations.Add(new UnityEngine.Vector2Int(x, up));
+            }
+
+            if (down < 0)
+            {
+                locations.Add(new UnityEngine.Vector2Int(x, down));
+            }
+
+            return locations.ToArray();
+        }
+
         public void AddRoomCard(RoomCardDataComponent roomCardDataComponent)
         {
             roomCardDataComponents.Add(roomCardDataComponent);
