@@ -4,7 +4,7 @@ using CardboardCore.StateMachines;
 using DungeonCrawler.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 
-namespace DungeonCrawler.Gameplay.States
+namespace DungeonCrawler.RoomBuilding.States
 {
     public class SpawnCameraState : State
     {

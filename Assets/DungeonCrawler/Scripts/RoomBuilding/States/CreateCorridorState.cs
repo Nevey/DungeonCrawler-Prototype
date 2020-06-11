@@ -1,7 +1,7 @@
 using CardboardCore.DI;
 using CardboardCore.EntityComponents;
-using DungeonCrawler.Cards;
 using DungeonCrawler.EntityComponents.Components;
+using UnityEngine;
 
 namespace DungeonCrawler.RoomBuilding.States
 {
@@ -14,12 +14,16 @@ namespace DungeonCrawler.RoomBuilding.States
             Entity levelEntity = entityRegister.FindEntity("LevelEntity");
 
             RoomBuilderComponent roomBuilderComponent = levelEntity.GetComponent<RoomBuilderComponent>();
-            roomBuilderComponent.CreateCorridor(currentRoom, x, y);
+
+            if (roomBuilderComponent.CreateCorridor(currentRoom, x, y, out Vector3 spawnOffset, out Vector2Int spawnDirection))
+            {
+                roomBuilderComponent.CreateRoom(roomCardDataComponent.GetCardData().id, spawnOffset, spawnDirection);
+            }
         }
 
         protected override void OnExit()
         {
-            throw new System.NotImplementedException();
+
         }
     }
 }

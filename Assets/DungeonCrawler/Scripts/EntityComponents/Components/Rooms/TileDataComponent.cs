@@ -5,10 +5,8 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class TileDataComponent : Component
     {
-        private TileData tileData;
+        public TileData tileData { get; private set; }
         public RoomData parentRoom { get; private set; }
-
-        public TileData Data => tileData;
 
         public void SetData(RoomData roomData, TileData tileData)
         {

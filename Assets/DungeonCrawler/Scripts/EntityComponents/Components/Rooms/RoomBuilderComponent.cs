@@ -7,6 +7,8 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class RoomBuilderComponent : Component
     {
+        [TweakableField] private int initialRoomId;
+
         private GameplayEntityFactory gameplayEntityFactory;
         private RoomDataComponent currentlyBuildingRoom;
         private int totalTileViewsToLoad;
@@ -29,12 +31,6 @@ namespace DungeonCrawler.EntityComponents.Components
 
             currentlyBuildingRoom = roomEntity.GetComponent<RoomDataComponent>();
             currentlyBuildingRoom.SetRoomData(roomData);
-
-            // Set world position values
-            PositionComponent positionComponent = roomEntity.GetComponent<PositionComponent>();
-            float positionX = position.x + roomData.gridSizeX / 2f;
-            float positionZ = position.z + roomData.gridSizeY / 2f;
-            positionComponent.SetPosition(positionX, 0f, positionZ);
 
             // Find amount of tile views we need to load
             SetupTotalTileViewsToLoad();
@@ -61,13 +57,19 @@ namespace DungeonCrawler.EntityComponents.Components
             }
         }
 
-        private void CreateRoomTiles()
+        private void CreateRoomTiles(int offsetX, int offsetY, UnityEngine.Vector2Int spawnDirection)
         {
             for (int x = 0; x < currentlyBuildingRoom.roomData.gridSizeX; x++)
             {
                 for (int y = 0; y < currentlyBuildingRoom.roomData.gridSizeY; y++)
                 {
-                    currentlyBuildingRoom.AddTile(CreateTile(currentlyBuildingRoom.roomData.tiles[x, y]));
+                    TileData tileData = currentlyBuildingRoom.roomData.tiles[x, y];
+                    tileData.x = tileData.x + offsetX;
+                    tileData.y = tileData.y + offsetY;
+
+                    TileDataComponent tileDataComponent = CreateTile(tileData);
+
+                    currentlyBuildingRoom.AddTile(tileDataComponent);
                 }
             }
         }
@@ -110,6 +112,15 @@ namespace DungeonCrawler.EntityComponents.Components
             return tileDataComponent;
         }
 
+        private void SetRoomEntityPosition(RoomData roomData, int x, int y)
+        {
+            // Set world position values
+            PositionComponent positionComponent = currentlyBuildingRoom.GetComponent<PositionComponent>();
+            float positionX = x + roomData.gridSizeX / 2f;
+            float positionZ = y + roomData.gridSizeY / 2f;
+            positionComponent.SetPosition(positionX, 0f, positionZ);
+        }
+
         private void OnTileViewLoadFinished(ViewComponent viewComponent)
         {
             viewComponent.LoadFinishedEvent -= OnTileViewLoadFinished;
@@ -125,37 +136,94 @@ namespace DungeonCrawler.EntityComponents.Components
             }
         }
 
-        public void CreateRoom(int id, UnityEngine.Vector3? position = null)
+        public void CreateRoom(RoomData roomData, UnityEngine.Vector3? position = null, UnityEngine.Vector2Int? direction = null)
         {
-            // Load room data based on given id
-            RoomData roomData = new RoomDataLoader().Load(id);
-
             // Get position
             position = position == null ? position = UnityEngine.Vector3.zero : position;
 
             // Create base room
             CreateRoomBase(roomData, position.Value);
 
+            int offsetX = (int)position.Value.x;
+            int offsetY = (int)position.Value.z;
+
+            TileData tileData = null;
+
+            if (direction == null)
+            {
+                tileData = new TileData();
+            }
+            else if (direction.Value == UnityEngine.Vector2Int.up)
+            {
+                // Get free tile at bottom row
+                tileData = currentlyBuildingRoom.GetFreeTileAtY(0);
+                offsetX -= tileData.x;
+            }
+            else if (direction.Value == UnityEngine.Vector2Int.down)
+            {
+                // Get free tile at top row
+                tileData = currentlyBuildingRoom.GetFreeTileAtY(roomData.gridSizeY - 1);
+                offsetX -= tileData.x;
+            }
+            else if (direction.Value == UnityEngine.Vector2Int.left)
+            {
+                // Get free tile at right column
+                tileData = currentlyBuildingRoom.GetFreeTileAtX(0);
+                offsetY -= tileData.y;
+            }
+            else if (direction.Value == UnityEngine.Vector2Int.right)
+            {
+                // Get free tile at left column
+                tileData = currentlyBuildingRoom.GetFreeTileAtX(roomData.gridSizeX - 1);
+                offsetY -= tileData.y;
+            }
+
+
+            currentlyBuildingRoom.offsetX = offsetX;
+            currentlyBuildingRoom.offsetY = offsetY;
+
+            if (direction == null)
+            {
+                direction = UnityEngine.Vector2Int.up;
+            }
+
             // Create room tiles
-            CreateRoomTiles();
+            CreateRoomTiles(offsetX, offsetY, direction.Value);
+
+            SetRoomEntityPosition(roomData, offsetX, offsetY);
+        }
+
+        public void CreateRoom(int id, UnityEngine.Vector3? position = null, UnityEngine.Vector2Int? direction = null)
+        {
+            // Load room data based on given id
+            RoomData roomData = new RoomDataLoader().Load(id);
+
+            CreateRoom(roomData, position, direction);
         }
 
         public void CreateInitialRoom()
         {
-            CreateRoom(0);
+            CreateRoom(initialRoomId);
         }
 
-        public void CreateCorridor(RoomDataComponent currentRoom, int x, int y)
+        public bool CreateCorridor(RoomDataComponent currentRoom, int x, int y, out UnityEngine.Vector3 spawnOffset, out UnityEngine.Vector2Int spawnDirection)
         {
             // Get potential spawn locations around given coords
             UnityEngine.Vector2Int[] potentialSpawnLocations = currentRoom.GetPotentialSpawnLocations(x, y);
+
+            if (potentialSpawnLocations.Length == 0)
+            {
+                spawnOffset = UnityEngine.Vector3.zero;
+                spawnDirection = UnityEngine.Vector2Int.zero;
+                return false;
+            }
 
             // Get an actual spawn location, randomly
             int randomIndex = UnityEngine.Random.Range(0, potentialSpawnLocations.Length);
             UnityEngine.Vector2Int spawnLocation = potentialSpawnLocations[randomIndex];
 
             // Set spawn direction, away from given coords
-            UnityEngine.Vector2Int spawnDirection = spawnLocation - new UnityEngine.Vector2Int(x, y);
+            spawnDirection = spawnLocation - new UnityEngine.Vector2Int(x, y);
 
             // TODO: Add one or two turns in the corridor
             // Set length of the corridor
@@ -174,6 +242,14 @@ namespace DungeonCrawler.EntityComponents.Components
 
             // Create corridor tiles
             CreateCorridorTiles(x, y, corridorLength, spawnDirection);
+
+            spawnOffset = new UnityEngine.Vector3(spawnLocation.x, 0f, spawnLocation.y);
+            spawnOffset.x += spawnDirection.x * corridorLength;
+            spawnOffset.z += spawnDirection.y * corridorLength;
+
+            SetRoomEntityPosition(roomData, (int)spawnOffset.x, (int)spawnOffset.z);
+
+            return true;
         }
     }
 }

@@ -1,4 +1,5 @@
 using CardboardCore.EntityComponents;
+using CardboardCore.Utilities;
 using DungeonCrawler.UserInput;
 
 namespace DungeonCrawler.EntityComponents.Components
@@ -59,6 +60,8 @@ namespace DungeonCrawler.EntityComponents.Components
                     gridPositionComponent.UpdateY(e.strength);
                     break;
             }
+
+            Log.Write($"New Position: {gridPositionComponent.x} - {gridPositionComponent.y}");
 
             movementActionSetController.Unbind();
         }

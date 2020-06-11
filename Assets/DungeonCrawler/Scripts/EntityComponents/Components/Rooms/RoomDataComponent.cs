@@ -24,6 +24,8 @@ namespace DungeonCrawler.EntityComponents.Components
         public List<RoomCardDataComponent> roomCardDataComponents { get; private set; }
 
         public RoomData roomData { get; private set; }
+        public int offsetX;
+        public int offsetY;
 
         protected override void OnStart()
         {
@@ -49,7 +51,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
             for (int i = 0; i < tileDataComponents.Count; i++)
             {
-                if (tileDataComponents[i].Data.tileState == tileState)
+                if (tileDataComponents[i].tileData.tileState == tileState)
                 {
                     foundTiles.Add(tileDataComponents[i]);
                 }
@@ -64,6 +66,52 @@ namespace DungeonCrawler.EntityComponents.Components
             int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
 
             return tiles[randomIndex];
+        }
+
+        public TileData GetFreeTileAtX(int x)
+        {
+            TileData[] tiles = GetTilesAtX(x, TileState.Default);
+            int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
+
+            return tiles[0];
+        }
+
+        public TileData GetFreeTileAtY(int y)
+        {
+            TileData[] tiles = GetTilesAtY(y, TileState.Default);
+            int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
+
+            return tiles[0];
+        }
+
+        public TileData[] GetTilesAtX(int x, TileState tileState)
+        {
+            List<TileData> tiles = new List<TileData>();
+
+            for (int y = 0; y < roomData.gridSizeY; y++)
+            {
+                if (roomData.tiles[x, y].tileState == tileState)
+                {
+                    tiles.Add(roomData.tiles[x, y]);
+                }
+            }
+
+            return tiles.ToArray();
+        }
+
+        public TileData[] GetTilesAtY(int y, TileState tileState)
+        {
+            List<TileData> tiles = new List<TileData>();
+
+            for (int x = 0; x < roomData.gridSizeX; x++)
+            {
+                if (roomData.tiles[x, y].tileState == tileState)
+                {
+                    tiles.Add(roomData.tiles[x, y]);
+                }
+            }
+
+            return tiles.ToArray();
         }
 
         public TileData[] GetSurroundingTiles(int x, int y)

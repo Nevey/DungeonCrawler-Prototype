@@ -4,7 +4,7 @@ using CardboardCore.StateMachines;
 using DungeonCrawler.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 
-namespace DungeonCrawler.Gameplay.States
+namespace DungeonCrawler.RoomBuilding.States
 {
     public class SpawnPlayersState : State
     {
@@ -24,7 +24,7 @@ namespace DungeonCrawler.Gameplay.States
             TileDataComponent randomFreeTile = roomDataComponent.GetFreeTile();
 
             Entity playerEntity = new GameplayEntityFactory().Instantiate("PlayerEntity");
-            playerEntity.GetComponent<GridPositionComponent>().SetPosition(randomFreeTile.Data.x, randomFreeTile.Data.y);
+            playerEntity.GetComponent<GridPositionComponent>().SetPosition(randomFreeTile.tileData.x, randomFreeTile.tileData.y);
 
             playerEntity.GetComponent<RoomAwarenessComponent>().EnterRoom(roomDataComponent);
 

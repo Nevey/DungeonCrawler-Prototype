@@ -18,7 +18,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public override void Load()
         {
-            if (tileDataComponent.Data.tileState == Levels.TileState.Unused)
+            if (tileDataComponent.tileData.tileState == Levels.TileState.Unused)
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public void SetupSpawnAnimationOnViewLoaded(int index)
         {
-            if (tileDataComponent.Data.tileState == Levels.TileState.Unused)
+            if (tileDataComponent.tileData.tileState == Levels.TileState.Unused)
             {
                 return;
             }

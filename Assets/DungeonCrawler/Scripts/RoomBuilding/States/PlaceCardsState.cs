@@ -8,7 +8,7 @@ using DungeonCrawler.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 using DungeonCrawler.Levels;
 
-namespace DungeonCrawler.Gameplay.States
+namespace DungeonCrawler.RoomBuilding.States
 {
     public class PlaceCardsState : State
     {

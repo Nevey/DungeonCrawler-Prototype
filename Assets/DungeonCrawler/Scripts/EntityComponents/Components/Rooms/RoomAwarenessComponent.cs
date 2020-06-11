@@ -22,8 +22,8 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public bool CanWalk(MovementInputEventArgs e)
         {
-            int targetX = gridPositionComponent.x;
-            int targetY = gridPositionComponent.y;
+            int targetX = gridPositionComponent.x - currentRoom.offsetX;
+            int targetY = gridPositionComponent.y - currentRoom.offsetY;
 
             switch (e.inputDirection)
             {

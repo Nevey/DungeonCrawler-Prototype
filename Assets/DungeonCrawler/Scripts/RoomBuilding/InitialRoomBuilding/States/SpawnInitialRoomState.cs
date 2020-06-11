@@ -4,9 +4,9 @@ using CardboardCore.StateMachines;
 using DungeonCrawler.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 
-namespace DungeonCrawler.Gameplay.States
+namespace DungeonCrawler.RoomBuilding.States
 {
-    public class SpawnRoomState : State
+    public class SpawnInitialRoomState : State
     {
         [Inject] private EntityRegister entityRegister;
 
@@ -20,7 +20,7 @@ namespace DungeonCrawler.Gameplay.States
 
             roomBuilderComponent = levelEntity.GetComponent<RoomBuilderComponent>();
             roomBuilderComponent.LevelBuildingFinishedEvent += OnLevelBuildingFinished;
-            roomBuilderComponent.CreateInitialRoom(); // TODO: spawn room based on room card
+            roomBuilderComponent.CreateInitialRoom();
         }
 
         protected override void OnExit()
