@@ -79,7 +79,6 @@ namespace DungeonCrawler.EntityComponents.Components
                 offsetY -= tileData.y;
             }
 
-
             currentlyBuildingRoom.offsetX = offsetX;
             currentlyBuildingRoom.offsetY = offsetY;
 

@@ -41,12 +41,19 @@ namespace DungeonCrawler.EntityComponents.Components
             LoadFinishedEvent -= PlayAnimationOnLoadFinished;
         }
 
-        public void PlaySpawnAnimation()
+        public void PlaySpawnAnimation(TweenCallback callback = null)
         {
+            if (tileDataComponent.tileData.tileState == Levels.TileState.Unused)
+            {
+                callback?.Invoke();
+                return;
+            }
+
             gameObject.transform.localScale = UnityEngine.Vector3.zero;
 
             scaleTween = gameObject.transform.DOScale(1f, spawnAnimationDuration);
             scaleTween.SetDelay(spawnAnimationDelay);
+            scaleTween.OnComplete(callback);
             scaleTween.Play();
         }
 

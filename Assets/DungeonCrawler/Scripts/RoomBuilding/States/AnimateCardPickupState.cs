@@ -13,7 +13,7 @@ namespace DungeonCrawler.RoomBuilding.States
             Entity entity = entityRegister.FindEntity("GameplayCameraEntity");
 
             CardViewComponent cardViewComponent = roomCardDataComponent.GetComponent<CardViewComponent>();
-            cardViewComponent.PlayPickupAnimation(entity, owner.ToNextState);
+            cardViewComponent.PlayPickupAnimation(entity, () => { owner.ToNextState(); });
         }
 
         protected override void OnExit()

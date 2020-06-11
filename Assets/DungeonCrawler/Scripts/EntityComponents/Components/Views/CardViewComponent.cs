@@ -60,11 +60,14 @@ namespace DungeonCrawler.EntityComponents.Components
             sequence.Play();
         }
 
-        public void PlayPlacementAnimation(TweenCallback callback)
+        public void PlayPlacementAnimation(Entity targetEntity, TweenCallback callback)
         {
-            // Get grid position
-            // Find direction of spawn location compared to current grid position
-            // 
+            PositionComponent targetPositionComponent = targetEntity.GetComponent<PositionComponent>();
+
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(positionComponent.SetPositionAnimated(targetPositionComponent.position, 2f));
+            sequence.OnComplete(callback);
+            sequence.Play();
         }
     }
 }

@@ -12,17 +12,19 @@ namespace DungeonCrawler.Gameplay.States
         [Inject] private EntityRegister entityRegister;
         [Inject] private InputManager inputManager;
 
+        private Entity playerEntity;
         private MovementInputComponent movementInputComponent;
         private CardPickupComponent cardPickupComponent;
         private RoomAwarenessComponent roomAwarenessComponent;
         private GridPositionComponent gridPositionComponent;
+        private RoomBuilderStateMachine roomBuilderStateMachine;
 
         protected override void OnEnter()
         {
             // TODO: Once multiplayer(ed), figure out if everyone is allowed to move at the same time, or if it's turn based
             // TODO: Receive other player's movement, send local player movement
 
-            Entity playerEntity = entityRegister.FindEntity("PlayerEntity");
+            playerEntity = entityRegister.FindEntity("PlayerEntity");
 
             movementInputComponent = playerEntity.GetComponent<MovementInputComponent>();
             movementInputComponent.SetMovementActionSetController(inputManager.movementActionSetController);
@@ -48,14 +50,26 @@ namespace DungeonCrawler.Gameplay.States
 
             if (cardDataComponent is RoomCardDataComponent roomCardDataComponent)
             {
-                RoomBuilderStateMachine roomBuilderStateMachine = new RoomBuilderStateMachine(
+                roomBuilderStateMachine = new RoomBuilderStateMachine(
                     roomAwarenessComponent.currentRoom,
                     roomCardDataComponent,
                     gridPositionComponent.x,
                     gridPositionComponent.y);
 
                 roomBuilderStateMachine.Start();
+                roomBuilderStateMachine.StoppedEvent += OnRoomBuilderStateMachineStopped;
             }
+        }
+
+        private void OnRoomBuilderStateMachineStopped()
+        {
+            roomBuilderStateMachine.StoppedEvent -= OnRoomBuilderStateMachineStopped;
+            roomBuilderStateMachine = null;
+
+            movementInputComponent.EnableInput();
+
+            CameraTargetComponent cameraTargetComponent = entityRegister.FindEntity("GameplayCameraEntity").GetComponent<CameraTargetComponent>();
+            cameraTargetComponent.SetTarget(playerEntity);
         }
     }
 }

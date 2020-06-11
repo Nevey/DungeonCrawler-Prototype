@@ -12,7 +12,7 @@ namespace DungeonCrawler.RoomBuilding
             AddTransition<SpawnInitialRoomState, AnimateRoomState>();
             AddTransition<AnimateRoomState, SpawnPlayersState>();
             AddTransition<SpawnPlayersState, PlaceCardsState>();
-            AddTransition<PlaceCardsState, StopInitialRoomBuildingState>();
+            AddTransition<PlaceCardsState, StopStateMachineState>();
         }
     }
 }

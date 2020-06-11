@@ -24,7 +24,7 @@ namespace DungeonCrawler.EntityComponents.Components
             }
         }
 
-        public bool CreateCorridor(RoomDataComponent currentRoom, int x, int y, out UnityEngine.Vector3 spawnOffset, out UnityEngine.Vector2Int spawnDirection)
+        public void CreateCorridor(RoomDataComponent currentRoom, int x, int y, out UnityEngine.Vector3 spawnOffset, out UnityEngine.Vector2Int spawnDirection)
         {
             // Get potential spawn locations around given coords
             UnityEngine.Vector2Int[] potentialSpawnLocations = currentRoom.GetPotentialSpawnLocations(x, y);
@@ -33,7 +33,7 @@ namespace DungeonCrawler.EntityComponents.Components
             {
                 spawnOffset = UnityEngine.Vector3.zero;
                 spawnDirection = UnityEngine.Vector2Int.zero;
-                return false;
+                return;
             }
 
             // Get an actual spawn location, randomly
@@ -51,6 +51,19 @@ namespace DungeonCrawler.EntityComponents.Components
             RoomData roomData = new RoomData();
             roomData.gridSizeX = spawnDirection.x * corridorLength;
             roomData.gridSizeY = spawnDirection.y * corridorLength;
+            roomData.gridSizeX = roomData.gridSizeX == 0 ? 1 : roomData.gridSizeX;
+            roomData.gridSizeY = roomData.gridSizeY == 0 ? 1 : roomData.gridSizeY;
+
+            // Faking tile data...
+            roomData.tiles = new TileData[roomData.gridSizeX, roomData.gridSizeY];
+
+            for (int tilesX = 0; tilesX < roomData.gridSizeX; tilesX++)
+            {
+                for (int tilesY = 0; tilesY < roomData.gridSizeY; tilesY++)
+                {
+                    roomData.tiles[tilesX, tilesY] = new TileData();
+                }
+            }
 
             // Get spawn location in world space based on given coords
             UnityEngine.Vector3 position = new UnityEngine.Vector3(x, 0f, y);
@@ -66,8 +79,6 @@ namespace DungeonCrawler.EntityComponents.Components
             spawnOffset.z += spawnDirection.y * corridorLength;
 
             SetRoomEntityPosition(roomData, (int)spawnOffset.x, (int)spawnOffset.z);
-
-            return true;
         }
     }
 }

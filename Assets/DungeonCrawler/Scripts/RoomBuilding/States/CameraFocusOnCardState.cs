@@ -11,7 +11,7 @@ namespace DungeonCrawler.RoomBuilding.States
         protected override void OnEnter()
         {
             Entity cameraEntity = entityRegister.FindEntity("GameplayCameraEntity");
-            cameraEntity.GetComponent<CameraTargetComponent>().SetTarget(roomCardDataComponent.owner, owner.ToNextState);
+            cameraEntity.GetComponent<CameraTargetComponent>().SetTarget(roomCardDataComponent.owner, () => { owner.ToNextState(); });
         }
 
         protected override void OnExit()

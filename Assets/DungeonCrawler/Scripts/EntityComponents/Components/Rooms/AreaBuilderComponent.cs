@@ -14,7 +14,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public List<RoomDataComponent> rooms { get; private set; }
 
-        public event Action<RoomDataComponent> LevelBuildingFinishedEvent;
+        public event Action<RoomDataComponent> AreaBuildingFinishedEvent;
 
         protected override void OnStart()
         {
@@ -90,16 +90,26 @@ namespace DungeonCrawler.EntityComponents.Components
 
             if (currentTileviewsLoaded == totalTileViewsToLoad)
             {
-                LevelBuildingFinishedEvent?.Invoke(currentlyBuildingRoom);
+                AreaBuildingFinishedEvent?.Invoke(currentlyBuildingRoom);
                 currentTileviewsLoaded = 0;
             }
         }
 
-        public void PlayRoomBuildAnimation()
+        public void PlayRoomBuildAnimation(Action callback = null)
         {
-            for (int i = 0; i < currentlyBuildingRoom.tileDataComponents.Count; i++)
+            int tileAnimations = currentlyBuildingRoom.tileDataComponents.Count;
+
+            for (int i = 0; i < tileAnimations; i++)
             {
-                currentlyBuildingRoom.tileDataComponents[i].GetComponent<TileViewComponent>().PlaySpawnAnimation();
+                currentlyBuildingRoom.tileDataComponents[i].GetComponent<TileViewComponent>().PlaySpawnAnimation(() =>
+                {
+                    tileAnimations--;
+
+                    if (tileAnimations == 0)
+                    {
+                        callback?.Invoke();
+                    }
+                });
             }
         }
     }

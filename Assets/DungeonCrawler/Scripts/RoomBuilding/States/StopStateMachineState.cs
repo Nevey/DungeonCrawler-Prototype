@@ -2,7 +2,7 @@
 
 namespace DungeonCrawler.RoomBuilding.States
 {
-    public class StopInitialRoomBuildingState : State
+    public class StopStateMachineState : State
     {
         protected override void OnEnter()
         {

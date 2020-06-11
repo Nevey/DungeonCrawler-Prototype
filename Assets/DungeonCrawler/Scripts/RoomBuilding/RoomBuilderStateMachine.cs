@@ -20,19 +20,21 @@ namespace DungeonCrawler.RoomBuilding
             AddTransition<CameraFocusOnCardState, AnimateCardPickupState>();
             AddTransition<AnimateCardPickupState, WaitForUserInputState>();
             AddTransition<WaitForUserInputState, CreateCorridorAndRoomState>();
-            // TODO: Place cards
-            // AddTransition<CreateCorridorState, AnimateCardPlacementState>();
+            AddTransition<CreateCorridorAndRoomState, PlaceCardsState>();
+            AddTransition<PlaceCardsState, StopStateMachineState>();
         }
 
         private void SetupRoomBuilderStates(RoomDataComponent currentRoom, RoomCardDataComponent roomCardDataComponent, int x, int y)
         {
             foreach (KeyValuePair<System.Type, State> item in stateDict)
             {
-                RoomBuilderState state = item.Value as RoomBuilderState;
-                state.currentRoom = currentRoom;
-                state.roomCardDataComponent = roomCardDataComponent;
-                state.x = x;
-                state.y = y;
+                if (item.Value is RoomBuilderState state)
+                {
+                    state.currentRoom = currentRoom;
+                    state.roomCardDataComponent = roomCardDataComponent;
+                    state.x = x;
+                    state.y = y;
+                }
             }
         }
     }

@@ -19,7 +19,7 @@ namespace DungeonCrawler.RoomBuilding.States
             Entity levelEntity = gameplayEntityFactory.Instantiate("LevelEntity");
 
             roomBuilderComponent = levelEntity.GetComponent<RoomBuilderComponent>();
-            roomBuilderComponent.LevelBuildingFinishedEvent += OnLevelBuildingFinished;
+            roomBuilderComponent.AreaBuildingFinishedEvent += OnLevelBuildingFinished;
             roomBuilderComponent.CreateInitialRoom();
         }
 
@@ -30,7 +30,7 @@ namespace DungeonCrawler.RoomBuilding.States
 
         private void OnLevelBuildingFinished(RoomDataComponent roomDataComponent)
         {
-            roomBuilderComponent.LevelBuildingFinishedEvent -= OnLevelBuildingFinished;
+            roomBuilderComponent.AreaBuildingFinishedEvent -= OnLevelBuildingFinished;
 
             CameraTargetComponent cameraTargetComponent = entityRegister.FindEntity("GameplayCameraEntity").GetComponent<CameraTargetComponent>();
             cameraTargetComponent.SetTarget(roomDataComponent.owner);
