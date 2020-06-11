@@ -10,7 +10,10 @@ namespace DungeonCrawler.RoomBuilding
         public RoomBuilderStateMachine(RoomCardDataComponent roomCardDataComponent)
         {
             SetInitialState<CameraFocusOnCardState>();
-            AddTransition<CameraFocusOnCardState, AnimateCardState>();
+            AddTransition<CameraFocusOnCardState, AnimateCardPickupState>();
+            AddTransition<AnimateCardPickupState, WaitForUserInputState>();
+            AddTransition<WaitForUserInputState, AnimateCardPlacementState>();
+            AddTransition<AnimateCardPlacementState, SpawnRoomState>();
 
             foreach (KeyValuePair<System.Type, State> item in stateDict)
             {

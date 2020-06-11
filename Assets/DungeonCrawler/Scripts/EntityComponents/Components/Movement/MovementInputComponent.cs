@@ -1,18 +1,14 @@
 using CardboardCore.EntityComponents;
-using CardboardCore.Utilities;
 using DungeonCrawler.UserInput;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
     public class MovementInputComponent : CardboardCore.EntityComponents.Component
     {
-        [TweakableField] private string prefabKey;
+        private MovementActionSetController movementActionSetController;
+        private Entity gameplayCameraEntity;
 
         // Owner's components
-        private Entity gameplayCameraEntity;
         private HoppingPositionComponent hoppingPositionComponent;
         private GridPositionComponent gridPositionComponent;
         private RoomAwarenessComponent roomAwarenessComponent;
@@ -20,77 +16,32 @@ namespace DungeonCrawler.EntityComponents.Components
         // Other's components
         private RotationComponent cameraRotationComponent;
 
-        // Other objects
-        private MovementInputManager movementInputManager;
-
-        private bool bindInputOnceLoaded;
-
-        private MovementInputState movementInputState;
-
-        public enum MovementInputState
-        {
-            Unlocked,
-            Locked
-        }
-
         protected override void OnStart()
         {
             hoppingPositionComponent = GetComponent<HoppingPositionComponent>();
             gridPositionComponent = GetComponent<GridPositionComponent>();
             roomAwarenessComponent = GetComponent<RoomAwarenessComponent>();
 
-            Log.Write(hoppingPositionComponent);
-
             hoppingPositionComponent.MovementAnimationFinishedEvent += OnMovementAnimationFinished;
-
-            // TODO: Don't do this for every MovementInputComponent!
-            // Unfortunately, movement input manager has to be a unity object, otherwise input won't be properly registered
-            AsyncOperationHandle<UnityEngine.GameObject> handle = Addressables.LoadAssetAsync<UnityEngine.GameObject>(prefabKey);
-            handle.Completed += OnMovementInputLoaded;
         }
 
         protected override void OnStop()
         {
             base.OnStop();
 
-            Unbind();
+            DisableInput();
 
+            movementActionSetController.InputEvent -= OnMovementInput;
             hoppingPositionComponent.MovementAnimationFinishedEvent -= OnMovementAnimationFinished;
-            movementInputManager.InputEvent -= OnMovementInput;
-
-            UnityEngine.MonoBehaviour.Destroy(movementInputManager.gameObject);
         }
 
         private void OnMovementAnimationFinished()
         {
-            movementInputManager?.Bind();
-        }
-
-        private void OnMovementInputLoaded(AsyncOperationHandle<GameObject> handle)
-        {
-            handle.Completed -= OnMovementInputLoaded;
-            Addressables.Release(handle);
-
-            UnityEngine.GameObject gameObject = UnityEngine.MonoBehaviour.Instantiate(handle.Result);
-            movementInputManager = gameObject.GetComponent<MovementInputManager>();
-
-            movementInputManager.InputEvent += OnMovementInput;
-
-            if (bindInputOnceLoaded)
-            {
-                movementInputManager.Bind();
-                bindInputOnceLoaded = false;
-            }
+            movementActionSetController.Bind();
         }
 
         private void OnMovementInput(object sender, MovementInputEventArgs e)
         {
-            // We're in need of an extra layer of control, which bypasses the Bind state of the input manager
-            if (movementInputState == MovementInputState.Locked)
-            {
-                return;
-            }
-
             e = ModifyInputBasedOnCameraAngle(e);
 
             if (!roomAwarenessComponent.CanWalk(e))
@@ -109,7 +60,7 @@ namespace DungeonCrawler.EntityComponents.Components
                     break;
             }
 
-            movementInputManager.Unbind();
+            movementActionSetController.Unbind();
         }
 
         private MovementInputEventArgs ModifyInputBasedOnCameraAngle(MovementInputEventArgs e)
@@ -147,20 +98,11 @@ namespace DungeonCrawler.EntityComponents.Components
             return e;
         }
 
-        public void Bind()
+        public void SetMovementActionSetController(MovementActionSetController movementActionSetController)
         {
-            if (movementInputManager == null)
-            {
-                bindInputOnceLoaded = true;
-                return;
-            }
+            movementActionSetController.InputEvent += OnMovementInput;
 
-            movementInputManager.Bind();
-        }
-
-        public void Unbind()
-        {
-            movementInputManager.Unbind();
+            this.movementActionSetController = movementActionSetController;
         }
 
         public void SetGameplayCameraEntity(Entity gameplayCameraEntity)
@@ -169,14 +111,14 @@ namespace DungeonCrawler.EntityComponents.Components
             cameraRotationComponent = gameplayCameraEntity.GetComponent<RotationComponent>();
         }
 
-        public void Lock()
+        public void EnableInput()
         {
-            movementInputState = MovementInputState.Locked;
+            movementActionSetController.Bind();
         }
 
-        public void Unlock()
+        public void DisableInput()
         {
-            movementInputState = MovementInputState.Unlocked;
+            movementActionSetController.Unbind();
         }
     }
 }

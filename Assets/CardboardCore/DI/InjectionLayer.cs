@@ -74,7 +74,7 @@ namespace CardboardCore.DI
                 }
                 else
                 {
-                    references[injectedInstance] = new List<object> {@object};
+                    references[injectedInstance] = new List<object> { @object };
                 }
             }
             else
@@ -136,7 +136,7 @@ namespace CardboardCore.DI
                 if (objects.Count == 0)
                 {
                     Type type = injectedInstance.GetType();
-                    
+
                     // Only add non-singletons to list of instances to destroy
                     if (singletons.Contains(injectedInstance))
                     {

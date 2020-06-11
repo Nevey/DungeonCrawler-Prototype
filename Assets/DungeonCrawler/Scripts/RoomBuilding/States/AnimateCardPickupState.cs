@@ -1,10 +1,10 @@
-using CardboardCore.DI;
+﻿using CardboardCore.DI;
 using CardboardCore.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 
 namespace DungeonCrawler.RoomBuilding.States
 {
-    public class AnimateCardState : RoomBuilderState
+    public class AnimateCardPickupState : RoomBuilderState
     {
         [Inject] private EntityRegister entityRegister;
 
@@ -13,7 +13,7 @@ namespace DungeonCrawler.RoomBuilding.States
             Entity entity = entityRegister.FindEntity("GameplayCameraEntity");
 
             CardViewComponent cardViewComponent = roomCardDataComponent.GetComponent<CardViewComponent>();
-            cardViewComponent.PlayPickupAnimation(entity);
+            cardViewComponent.PlayPickupAnimation(entity, owner.ToNextState);
         }
 
         protected override void OnExit()

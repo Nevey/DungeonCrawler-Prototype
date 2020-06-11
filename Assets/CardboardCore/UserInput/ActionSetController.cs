@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CardboardCore.DI;
 
 namespace CardboardCore.UserInput
 {
-    public abstract class InputManager : CardboardCoreBehaviour
+    public abstract class ActionSetController : CardboardCoreBehaviour
     {
         private readonly List<ActionSet> actionSets = new List<ActionSet>();
 

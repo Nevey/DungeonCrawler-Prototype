@@ -3,12 +3,14 @@ using CardboardCore.EntityComponents;
 using CardboardCore.StateMachines;
 using DungeonCrawler.EntityComponents.Components;
 using DungeonCrawler.RoomBuilding;
+using DungeonCrawler.UserInput;
 
 namespace DungeonCrawler.Gameplay.States
 {
     public class PlayerMovementState : State
     {
         [Inject] private EntityRegister entityRegister;
+        [Inject] private InputManager inputManager;
 
         private MovementInputComponent movementInputComponent;
         private CardPickupComponent cardPickupComponent;
@@ -21,8 +23,9 @@ namespace DungeonCrawler.Gameplay.States
             Entity playerEntity = entityRegister.FindEntity("PlayerEntity");
 
             movementInputComponent = playerEntity.GetComponent<MovementInputComponent>();
+            movementInputComponent.SetMovementActionSetController(inputManager.movementActionSetController);
             movementInputComponent.SetGameplayCameraEntity(entityRegister.FindEntity("GameplayCameraEntity"));
-            movementInputComponent.Bind();
+            movementInputComponent.EnableInput();
 
             cardPickupComponent = playerEntity.GetComponent<CardPickupComponent>();
             cardPickupComponent.CardPickedUpEvent += OnCardPickedUp;
@@ -30,13 +33,13 @@ namespace DungeonCrawler.Gameplay.States
 
         protected override void OnExit()
         {
-            movementInputComponent.Unbind();
+            movementInputComponent.DisableInput();
             cardPickupComponent.CardPickedUpEvent -= OnCardPickedUp;
         }
 
         private void OnCardPickedUp(CardDataComponent cardDataComponent)
         {
-            movementInputComponent.Unbind();
+            movementInputComponent.DisableInput();
 
             if (cardDataComponent is RoomCardDataComponent roomCardDataComponent)
             {

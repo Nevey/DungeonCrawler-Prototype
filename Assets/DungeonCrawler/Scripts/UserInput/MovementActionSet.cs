@@ -22,12 +22,15 @@ namespace DungeonCrawler.UserInput
 
         public event EventHandler<MovementInputEventArgs> InputEvent;
 
-        protected override void OnBind()
+        public MovementActionSet()
         {
             axisInputHorizontal = CreateAxisAction("Horizontal");
-            axisInputHorizontal.OnAxisInputEvent += OnAxisInputHorizontal;
-
             axisInputVertical = CreateAxisAction("Vertical");
+        }
+
+        protected override void OnBind()
+        {
+            axisInputHorizontal.OnAxisInputEvent += OnAxisInputHorizontal;
             axisInputVertical.OnAxisInputEvent += OnAxisInputVertical;
         }
 

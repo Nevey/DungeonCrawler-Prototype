@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using CardboardCore.UserInput;
 
 namespace DungeonCrawler.UserInput
 {
-    public class MovementInputManager : InputManager
+    public class MovementActionSetController : ActionSetController
     {
         private MovementActionSet movementActionSet;
 

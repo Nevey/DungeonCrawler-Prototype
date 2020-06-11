@@ -1,3 +1,4 @@
+using System;
 using CardboardCore.EntityComponents;
 using CardboardCore.Utilities;
 using DG.Tweening;
@@ -35,7 +36,7 @@ namespace DungeonCrawler.EntityComponents.Components
             rotationComponent.SetRandomRotationZ();
         }
 
-        public void PlayPickupAnimation(Entity targetEntity)
+        public void PlayPickupAnimation(Entity targetEntity, TweenCallback callback)
         {
             PositionComponent targetPositionComponent = targetEntity.GetComponent<PositionComponent>();
             RotationComponent targetRotationComponent = targetEntity.GetComponent<RotationComponent>();
@@ -56,6 +57,7 @@ namespace DungeonCrawler.EntityComponents.Components
             sequence.Append(rotationComponent.SetRotationAnimated(lookAtRotation, 1f));
             sequence.Insert(0f, positionComponent.SetPositionAnimated(liftPosition, 0.5f));
             sequence.Insert(0.5f, positionComponent.SetPositionAnimated(targetPositionComponent.position + cardFromTargetRelativePosition, 0.75f));
+            sequence.OnComplete(callback);
             sequence.Play();
         }
     }
