@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using CardboardCore.EntityComponents;
-using CardboardCore.Utilities;
 using DungeonCrawler.Levels;
 
 namespace DungeonCrawler.EntityComponents.Components
@@ -23,7 +22,28 @@ namespace DungeonCrawler.EntityComponents.Components
             rooms = new List<RoomDataComponent>();
         }
 
-        private void CreateTiles()
+        private void CreateBase(RoomData roomData, string key, UnityEngine.Vector3 position)
+        {
+            // Create the room entity
+            Entity roomEntity = gameplayEntityFactory.Instantiate(key);
+
+            currentlyBuildingRoom = roomEntity.GetComponent<RoomDataComponent>();
+            currentlyBuildingRoom.SetRoomData(roomData);
+
+            // Set world position values
+            PositionComponent positionComponent = roomEntity.GetComponent<PositionComponent>();
+            float positionX = position.x + roomData.gridSizeX / 2f;
+            float positionZ = position.z + roomData.gridSizeY / 2f;
+            positionComponent.SetPosition(positionX, 0f, positionZ);
+
+            // Find amount of tile views we need to load
+            SetupTotalTileViewsToLoad();
+
+            // Add current room data component to rooms list for future access
+            rooms.Add(currentlyBuildingRoom);
+        }
+
+        private void CreateRoomTiles()
         {
             for (int x = 0; x < currentlyBuildingRoom.roomData.gridSizeX; x++)
             {
@@ -31,6 +51,26 @@ namespace DungeonCrawler.EntityComponents.Components
                 {
                     currentlyBuildingRoom.AddTile(CreateTile(currentlyBuildingRoom.roomData.tiles[x, y]));
                 }
+            }
+        }
+
+        private void CreateCorridorTiles(int x, int y, int corridorLength, UnityEngine.Vector2Int spawnDirection)
+        {
+            for (int i = 0; i < corridorLength; i++)
+            {
+                UnityEngine.Vector2Int d = spawnDirection * (i + 1);
+
+                TileData tileData = new TileData();
+                tileData.x = x + d.x;
+                tileData.y = y + d.y;
+                tileData.tileState = TileState.Default;
+                tileData.walkableState = WalkableState.Walkable;
+
+                TileDataComponent tileDataComponent = CreateTile(tileData);
+                TileViewComponent tileViewComponent = tileDataComponent.GetComponent<TileViewComponent>();
+                tileViewComponent.SetupSpawnAnimationOnViewLoaded(i);
+
+                currentlyBuildingRoom.AddTile(tileDataComponent);
             }
         }
 
@@ -85,31 +125,14 @@ namespace DungeonCrawler.EntityComponents.Components
             }
         }
 
-        public void CreateRoom(int id, string key = "RoomEntity")
+        public void CreateRoom(int id, string key = "RoomEntity", UnityEngine.Vector3? position = null)
         {
-            // Create the room entity
-            Entity roomEntity = gameplayEntityFactory.Instantiate(key);
+            position = position == null ? position = UnityEngine.Vector3.zero : position;
 
-            // Set room data
             RoomData roomData = new RoomDataLoader().Load(id);
 
-            currentlyBuildingRoom = roomEntity.GetComponent<RoomDataComponent>();
-            currentlyBuildingRoom.SetRoomData(roomData);
-
-            // Set world position values
-            PositionComponent positionComponent = roomEntity.GetComponent<PositionComponent>();
-            float positionX = positionComponent.position.x + roomData.gridSizeX / 2f;
-            float positionZ = positionComponent.position.z + roomData.gridSizeY / 2f;
-            positionComponent.SetPosition(positionX, 0f, positionZ);
-
-            // Find amount of tile views we need to load
-            SetupTotalTileViewsToLoad();
-
-            // Add current room data component to rooms list for future access
-            rooms.Add(currentlyBuildingRoom);
-
-            // Start creating tiles!
-            CreateTiles();
+            CreateBase(roomData, key, position.Value);
+            CreateRoomTiles();
         }
 
         public void CreateInitialRoom()
@@ -119,54 +142,33 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public void CreateCorridor(RoomDataComponent currentRoom, int x, int y)
         {
-            Entity corridorEntity = gameplayEntityFactory.Instantiate("CorridorEntity");
-
-            RoomData roomData = new RoomData();
-            roomData.id = -1; // Not used during runtime, only for loading
-
+            // Get potential spawn locations around given coords
             UnityEngine.Vector2Int[] potentialSpawnLocations = currentRoom.GetPotentialSpawnLocations(x, y);
 
+            // Get an actual spawn location, randomly
             int randomIndex = UnityEngine.Random.Range(0, potentialSpawnLocations.Length);
             UnityEngine.Vector2Int spawnLocation = potentialSpawnLocations[randomIndex];
 
-            UnityEngine.Vector2Int direction = spawnLocation - new UnityEngine.Vector2Int(x, y);
+            // Set spawn direction, away from given coords
+            UnityEngine.Vector2Int spawnDirection = spawnLocation - new UnityEngine.Vector2Int(x, y);
 
             // TODO: Add one or two turns in the corridor
+            // Set length of the corridor
             int corridorLength = 4;
 
-            roomData.gridSizeX = direction.x * corridorLength;
-            roomData.gridSizeY = direction.y * corridorLength;
+            // Create room data, based on corridor length and spawn direction
+            RoomData roomData = new RoomData();
+            roomData.gridSizeX = spawnDirection.x * corridorLength;
+            roomData.gridSizeY = spawnDirection.y * corridorLength;
 
-            currentlyBuildingRoom = corridorEntity.GetComponent<RoomDataComponent>();
-            currentlyBuildingRoom.SetRoomData(roomData);
+            // Get spawn location in world space based on given coords
+            UnityEngine.Vector3 position = new UnityEngine.Vector3(x, 0f, y);
 
-            PositionComponent positionComponent = corridorEntity.GetComponent<PositionComponent>();
-            float positionX = positionComponent.position.x + roomData.gridSizeX / 2f;
-            float positionZ = positionComponent.position.z + roomData.gridSizeY / 2f;
-            positionComponent.SetPosition(positionX, 0f, positionZ);
-
-            // Find amount of tile views we need to load
-            SetupTotalTileViewsToLoad();
-
-            rooms.Add(currentlyBuildingRoom);
+            // Create base room
+            CreateBase(roomData, "CorridorEntity", position);
 
             // Create corridor tiles
-            for (int i = 0; i < corridorLength; i++)
-            {
-                UnityEngine.Vector2Int d = direction * (i + 1);
-
-                TileData tileData = new TileData();
-                tileData.x = x + d.x;
-                tileData.y = y + d.y;
-                tileData.tileState = TileState.Default;
-                tileData.walkableState = WalkableState.Walkable;
-
-                TileDataComponent tileDataComponent = CreateTile(tileData);
-                TileViewComponent tileViewComponent = tileDataComponent.GetComponent<TileViewComponent>();
-                tileViewComponent.SetupSpawnAnimationOnViewLoaded(i);
-
-                currentlyBuildingRoom.AddTile(tileDataComponent);
-            }
+            CreateCorridorTiles(x, y, corridorLength, spawnDirection);
         }
     }
 }
