@@ -40,7 +40,7 @@ namespace DungeonCrawler.RoomBuilding.States
             corridorBuilderComponent.AreaBuildingFinishedEvent -= OnCorridorBuildingFinished;
 
             roomBuilderComponent.AreaBuildingFinishedEvent += OnRoomBuildingFinished;
-            roomBuilderComponent.CreateRoom(roomCardDataComponent.GetCardData().id, spawnOffset, spawnDirection);
+            roomBuilderComponent.CreateRoom(roomCardDataComponent.GetCardData().roomId, spawnOffset, spawnDirection);
         }
 
         private void OnRoomBuildingFinished(RoomDataComponent obj)
