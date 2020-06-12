@@ -88,7 +88,7 @@ namespace DungeonCrawler.EC.Components
 
             if (tiles.Length == 0)
             {
-                tiles = GetTilesAtX(y, TileState.Doorway);
+                tiles = GetTilesAtY(y, TileState.Doorway);
             }
 
             int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
