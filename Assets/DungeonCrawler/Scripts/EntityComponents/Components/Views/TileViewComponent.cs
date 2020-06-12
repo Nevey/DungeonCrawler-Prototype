@@ -1,5 +1,7 @@
+using System;
 using CardboardCore.EntityComponents;
 using DG.Tweening;
+using DungeonCrawler.RoomBuilding.Debugging;
 
 namespace DungeonCrawler.EntityComponents.Components
 {
@@ -16,6 +18,14 @@ namespace DungeonCrawler.EntityComponents.Components
             base.OnStart();
 
             tileDataComponent = GetComponent<TileDataComponent>(true);
+
+            LoadFinishedEvent += Temp;
+        }
+
+        private void Temp(ViewComponent obj)
+        {
+            gameObject.GetComponent<WorldPositionDrawer>().x = tileDataComponent.tileData.x;
+            gameObject.GetComponent<WorldPositionDrawer>().y = tileDataComponent.tileData.y;
         }
 
         public override void Load()

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using CardboardCore.EntityComponents;
 using DungeonCrawler.Levels;
@@ -72,17 +71,29 @@ namespace DungeonCrawler.EntityComponents.Components
         public TileData GetFreeTileAtX(int x)
         {
             TileData[] tiles = GetTilesAtX(x, TileState.Default);
+
+            if (tiles.Length == 0)
+            {
+                tiles = GetTilesAtX(x, TileState.Doorway);
+            }
+
             int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
 
-            return tiles[0];
+            return tiles[randomIndex];
         }
 
         public TileData GetFreeTileAtY(int y)
         {
             TileData[] tiles = GetTilesAtY(y, TileState.Default);
+
+            if (tiles.Length == 0)
+            {
+                tiles = GetTilesAtX(y, TileState.Doorway);
+            }
+
             int randomIndex = UnityEngine.Random.Range(0, tiles.Length);
 
-            return tiles[0];
+            return tiles[randomIndex];
         }
 
         public TileData[] GetTilesAtX(int x, TileState tileState)
@@ -172,22 +183,22 @@ namespace DungeonCrawler.EntityComponents.Components
             int up = y + 1;
             int down = y - 1;
 
-            if (right > roomData.gridSizeX - 1)
+            if (right - offsetX > roomData.gridSizeX - 1)
             {
                 locations.Add(new UnityEngine.Vector2Int(right, y));
             }
 
-            if (left < 0)
+            if (left - offsetX < 0)
             {
                 locations.Add(new UnityEngine.Vector2Int(left, y));
             }
 
-            if (up > roomData.gridSizeY - 1)
+            if (up - offsetY > roomData.gridSizeY - 1)
             {
                 locations.Add(new UnityEngine.Vector2Int(x, up));
             }
 
-            if (down < 0)
+            if (down - offsetY < 0)
             {
                 locations.Add(new UnityEngine.Vector2Int(x, down));
             }

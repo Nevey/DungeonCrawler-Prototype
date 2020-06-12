@@ -45,12 +45,12 @@ namespace DungeonCrawler.EntityComponents.Components
 
             // TODO: Add one or two turns in the corridor
             // Set length of the corridor
-            int corridorLength = 4;
+            int corridorLength = 2;
 
             // Create room data, based on corridor length and spawn direction
             RoomData roomData = new RoomData();
-            roomData.gridSizeX = spawnDirection.x * corridorLength;
-            roomData.gridSizeY = spawnDirection.y * corridorLength;
+            roomData.gridSizeX = (int)UnityEngine.Mathf.Abs(spawnDirection.x * corridorLength);
+            roomData.gridSizeY = (int)UnityEngine.Mathf.Abs(spawnDirection.y * corridorLength);
             roomData.gridSizeX = roomData.gridSizeX == 0 ? 1 : roomData.gridSizeX;
             roomData.gridSizeY = roomData.gridSizeY == 0 ? 1 : roomData.gridSizeY;
 

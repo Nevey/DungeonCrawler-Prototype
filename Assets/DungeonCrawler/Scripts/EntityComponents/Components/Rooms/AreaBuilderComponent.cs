@@ -103,7 +103,7 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             int tileAnimations = currentlyBuildingRoom.tileDataComponents.Count;
 
-            for (int i = 0; i < tileAnimations; i++)
+            for (int i = 0; i < currentlyBuildingRoom.tileDataComponents.Count; i++)
             {
                 currentlyBuildingRoom.tileDataComponents[i].GetComponent<TileViewComponent>().PlaySpawnAnimation(() =>
                 {

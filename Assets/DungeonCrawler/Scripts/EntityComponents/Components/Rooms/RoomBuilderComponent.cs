@@ -59,23 +59,27 @@ namespace DungeonCrawler.EntityComponents.Components
                 // Get free tile at bottom row
                 tileData = currentlyBuildingRoom.GetFreeTileAtY(0);
                 offsetX -= tileData.x;
+                offsetY -= tileData.y;
             }
             else if (direction.Value == UnityEngine.Vector2Int.down)
             {
                 // Get free tile at top row
                 tileData = currentlyBuildingRoom.GetFreeTileAtY(roomData.gridSizeY - 1);
                 offsetX -= tileData.x;
+                offsetY -= tileData.y;
             }
             else if (direction.Value == UnityEngine.Vector2Int.left)
             {
                 // Get free tile at right column
-                tileData = currentlyBuildingRoom.GetFreeTileAtX(0);
+                tileData = currentlyBuildingRoom.GetFreeTileAtX(roomData.gridSizeX - 1);
+                offsetX -= tileData.x;
                 offsetY -= tileData.y;
             }
             else if (direction.Value == UnityEngine.Vector2Int.right)
             {
                 // Get free tile at left column
-                tileData = currentlyBuildingRoom.GetFreeTileAtX(roomData.gridSizeX - 1);
+                tileData = currentlyBuildingRoom.GetFreeTileAtX(0);
+                offsetX -= tileData.x;
                 offsetY -= tileData.y;
             }
 
