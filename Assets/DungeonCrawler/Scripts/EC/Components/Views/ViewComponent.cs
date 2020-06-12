@@ -10,8 +10,11 @@ namespace DungeonCrawler.EC.Components
     {
         [TweakableField] private string key;
 
+        private AsyncOperationHandle<GameObject> handle;
+
         protected PositionComponent positionComponent;
         protected RotationComponent rotationComponent;
+
         public GameObject gameObject { get; protected set; }
 
         public event Action<ViewComponent> LoadFinishedEvent;
@@ -35,6 +38,8 @@ namespace DungeonCrawler.EC.Components
 
         protected override void OnStop()
         {
+            Addressables.Release(handle);
+
             MonoBehaviour.Destroy(gameObject);
 
             if (positionComponent != null)
@@ -78,7 +83,6 @@ namespace DungeonCrawler.EC.Components
 
         private void OnLoadPrefabCompleted(AsyncOperationHandle<GameObject> handle)
         {
-            // Addressables.Release(handle);
             handle.Completed -= OnLoadPrefabCompleted;
 
             GameObject gameObject = UnityEngine.MonoBehaviour.Instantiate(handle.Result);
@@ -92,7 +96,7 @@ namespace DungeonCrawler.EC.Components
 
         public virtual void Load()
         {
-            AsyncOperationHandle<GameObject> handle = Addressables.LoadAssetAsync<GameObject>(key);
+            handle = Addressables.LoadAssetAsync<GameObject>(key);
             handle.Completed += OnLoadPrefabCompleted;
         }
 

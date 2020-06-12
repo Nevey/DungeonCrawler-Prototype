@@ -21,7 +21,7 @@ namespace CardboardCore.EC
             {
                 ComponentData componentData = entityData.components[i];
 
-                Type type = Reflection.GetType(componentData.id);
+                Type type = Reflection.GetType(this, componentData.id);
 
                 Component component = Activator.CreateInstance(type) as Component;
 

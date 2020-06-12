@@ -25,59 +25,68 @@ namespace CardboardCore.Utilities
             // TODO: Search through less assemblies, this is overkill...
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            foreach (Assembly appDomain in assemblies)
+            foreach (Assembly assembly in assemblies)
             {
                 try
                 {
-                    Type[] types = appDomain.GetTypes().Where(t => type.IsAssignableFrom(t)).ToArray();
+                    Type[] types = assembly.GetTypes().Where(t => type.IsAssignableFrom(t)).ToArray();
                     typeList.AddRange(types);
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
-                    throw Log.Exception($"Error while loading types for domain {appDomain.FullName}: {ex.Message}");
+                    throw Log.Exception($"Error while loading types for domain {assembly.FullName}: {ex.Message}");
                 }
             }
 
             return typeList.ToArray();
         }
 
-        public static Type GetType(string typeString)
+        public static Type GetType(Assembly assembly, string typeString)
         {
-            Type type = null;
-
-            // TODO: Search through less assemblies, this is overkill...
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (Assembly appDomain in assemblies)
+            try
             {
-                try
+                Type[] types = assembly.GetTypes();
+
+                for (int i = 0; i < types.Length; i++)
                 {
-                    Type[] types = appDomain.GetTypes();
+                    Type t = types[i];
 
-                    for (int i = 0; i < types.Length; i++)
+                    // This can easily cause ambiguous cases...
+                    if (t.Name == typeString)
                     {
-                        Type t = types[i];
-
-                        // This can easily cause ambiguous cases...
-                        if (t.Name == typeString)
-                        {
-                            type = t;
-                            break;
-                        }
-                    }
-
-                    if (type != null)
-                    {
-                        break;
+                        return t;
                     }
                 }
-                catch (ReflectionTypeLoadException ex)
+
+                return null;
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                throw Log.Exception($"Error while loading types for domain {assembly.FullName}: {ex.Message}");
+            }
+        }
+
+        public static Type GetType(object sender, string typeString)
+        {
+            Assembly assembly = sender.GetType().Assembly;
+            return GetType(assembly, typeString);
+        }
+
+        public static Type GetType(string typeString)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (Assembly assembly in assemblies)
+            {
+                Type type = GetType(assembly, typeString);
+
+                if (type != null)
                 {
-                    throw Log.Exception($"Error while loading types for domain {appDomain.FullName}: {ex.Message}");
+                    return type;
                 }
             }
 
-            return type;
+            return null;
         }
 
         public static MethodInfo[] GetMethodsWithCustomAttribute<T>() where T : Attribute
