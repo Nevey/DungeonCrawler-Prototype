@@ -1,9 +1,21 @@
+using System.Collections.Generic;
+using System.Linq;
+using CardboardCore.Utilities;
 using DungeonCrawler.Levels;
 
 namespace DungeonCrawler.EC.Components
 {
     public class CorridorBuilderComponent : AreaBuilderComponent
     {
+        private TileRegistryComponent tileRegistryComponent;
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            tileRegistryComponent = GetComponent<TileRegistryComponent>();
+        }
+
         private void CreateCorridorTiles(int x, int y, int corridorLength, UnityEngine.Vector2Int spawnDirection)
         {
             for (int i = 0; i < corridorLength; i++)
@@ -27,17 +39,32 @@ namespace DungeonCrawler.EC.Components
         public void CreateCorridor(RoomDataComponent currentRoom, int x, int y, out UnityEngine.Vector3 spawnOffset, out UnityEngine.Vector2Int spawnDirection)
         {
             // Get potential spawn locations around given coords
-            UnityEngine.Vector2Int[] potentialSpawnLocations = currentRoom.GetPotentialSpawnLocations(x, y);
+            List<UnityEngine.Vector2Int> potentialSpawnLocations = currentRoom.GetPotentialSpawnLocations(x, y).ToList();
 
-            if (potentialSpawnLocations.Length == 0)
+            if (potentialSpawnLocations.Count > 0)
+            {
+                // Remove any potential spawn locations overlapping with another room
+                for (int i = potentialSpawnLocations.Count - 1; i >= 0; i--)
+                {
+                    if (tileRegistryComponent.GetTile(potentialSpawnLocations[i].x, potentialSpawnLocations[i].y) == null)
+                    {
+                        continue;
+                    }
+
+                    potentialSpawnLocations.RemoveAt(i);
+                }
+            }
+
+            if (potentialSpawnLocations.Count == 0)
             {
                 spawnOffset = UnityEngine.Vector3.zero;
                 spawnDirection = UnityEngine.Vector2Int.zero;
-                return;
+
+                Log.Exception("No potential spawn locations could be found!");
             }
 
             // Get an actual spawn location, randomly
-            int randomIndex = UnityEngine.Random.Range(0, potentialSpawnLocations.Length);
+            int randomIndex = UnityEngine.Random.Range(0, potentialSpawnLocations.Count);
             UnityEngine.Vector2Int spawnLocation = potentialSpawnLocations[randomIndex];
 
             // Set spawn direction, away from given coords
