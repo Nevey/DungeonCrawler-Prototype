@@ -1,9 +1,9 @@
 using System;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using DG.Tweening;
 using DungeonCrawler.RoomBuilding.Debugging;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class TileViewComponent : ViewComponent
     {

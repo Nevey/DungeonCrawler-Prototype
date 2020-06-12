@@ -1,7 +1,7 @@
 using CardboardCore.Loop;
 using CardboardCore.DI;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     public class EntityFactory<T> where T : IEntityLoadData
     {

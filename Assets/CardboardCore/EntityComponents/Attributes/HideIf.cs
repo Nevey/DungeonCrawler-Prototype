@@ -1,5 +1,5 @@
 using System;
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class HideIf : Attribute

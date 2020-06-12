@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class RoomRegistryComponent : Component
     {

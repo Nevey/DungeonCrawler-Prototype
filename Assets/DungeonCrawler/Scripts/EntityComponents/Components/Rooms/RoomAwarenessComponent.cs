@@ -1,8 +1,8 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using DungeonCrawler.Levels;
 using DungeonCrawler.UserInput;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class RoomAwarenessComponent : Component
     {

@@ -1,8 +1,8 @@
 using System;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using DungeonCrawler.Cards;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class CardDataComponent : Component
     {

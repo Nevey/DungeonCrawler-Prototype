@@ -1,12 +1,12 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using UnityEngine;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
-    public class ViewComponent : CardboardCore.EntityComponents.Component
+    public class ViewComponent : CardboardCore.EC.Component
     {
         [TweakableField] private string key;
 

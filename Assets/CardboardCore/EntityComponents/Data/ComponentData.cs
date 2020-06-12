@@ -1,6 +1,6 @@
 using CardboardCore.Utilities;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     public class ComponentData
     {

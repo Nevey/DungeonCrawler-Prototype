@@ -1,6 +1,6 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class CameraViewComponent : ViewComponent { }
 }

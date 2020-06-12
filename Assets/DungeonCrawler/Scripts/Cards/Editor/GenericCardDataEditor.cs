@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using CardboardCore.Utilities;
 using DungeonCrawler.Cards;
 using UnityEditor;

@@ -1,7 +1,7 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using DungeonCrawler.Levels;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class RoomBuilderComponent : AreaBuilderComponent
     {

@@ -1,6 +1,6 @@
 using DungeonCrawler.Cards;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class RoomCardDataComponent : CardDataComponent<RoomCardData> { }
 }

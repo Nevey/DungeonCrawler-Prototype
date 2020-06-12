@@ -1,6 +1,6 @@
 using DungeonCrawler.Levels;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class CorridorBuilderComponent : AreaBuilderComponent
     {

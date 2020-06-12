@@ -1,8 +1,8 @@
 using CardboardCore.DI;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using CardboardCore.StateMachines;
-using DungeonCrawler.EntityComponents;
-using DungeonCrawler.EntityComponents.Components;
+using DungeonCrawler.EC;
+using DungeonCrawler.EC.Components;
 
 namespace DungeonCrawler.RoomBuilding.States
 {

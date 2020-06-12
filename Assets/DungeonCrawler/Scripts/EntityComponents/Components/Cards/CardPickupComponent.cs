@@ -1,7 +1,7 @@
 using System;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class CardPickupComponent : Component
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using CardboardCore.DI;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using CardboardCore.StateMachines;
 using DungeonCrawler.Cards;
-using DungeonCrawler.EntityComponents;
-using DungeonCrawler.EntityComponents.Components;
+using DungeonCrawler.EC;
+using DungeonCrawler.EC.Components;
 using DungeonCrawler.Levels;
 
 namespace DungeonCrawler.RoomBuilding.States

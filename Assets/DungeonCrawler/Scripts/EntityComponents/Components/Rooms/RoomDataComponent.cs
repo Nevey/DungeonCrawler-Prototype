@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using DungeonCrawler.Levels;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     /// <summary>
     /// Holds room data and grid information

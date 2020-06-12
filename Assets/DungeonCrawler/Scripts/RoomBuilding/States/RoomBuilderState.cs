@@ -1,5 +1,5 @@
 using CardboardCore.StateMachines;
-using DungeonCrawler.EntityComponents.Components;
+using DungeonCrawler.EC.Components;
 
 namespace DungeonCrawler.RoomBuilding.States
 {

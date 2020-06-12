@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using CardboardCore.DI;
-using DungeonCrawler.EntityComponents;
+using DungeonCrawler.EC;
 using CardboardCore.Utilities;
 using System.Reflection;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     public static class ValueTypedEditorGUILayout
     {

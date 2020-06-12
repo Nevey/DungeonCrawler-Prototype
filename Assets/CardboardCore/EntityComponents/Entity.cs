@@ -4,7 +4,7 @@ using System.Reflection;
 using CardboardCore.Loop;
 using CardboardCore.Utilities;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     public class Entity : IGameLoopable
     {

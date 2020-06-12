@@ -1,4 +1,4 @@
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     public class FieldData
     {

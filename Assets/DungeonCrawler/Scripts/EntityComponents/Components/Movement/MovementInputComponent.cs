@@ -1,10 +1,10 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using CardboardCore.Utilities;
 using DungeonCrawler.UserInput;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
-    public class MovementInputComponent : CardboardCore.EntityComponents.Component
+    public class MovementInputComponent : CardboardCore.EC.Component
     {
         private MovementActionSetController movementActionSetController;
         private Entity gameplayCameraEntity;

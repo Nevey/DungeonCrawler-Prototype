@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using CardboardCore.StateMachines;
-using DungeonCrawler.EntityComponents.Components;
+using DungeonCrawler.EC.Components;
 using DungeonCrawler.RoomBuilding.States;
 
 namespace DungeonCrawler.RoomBuilding

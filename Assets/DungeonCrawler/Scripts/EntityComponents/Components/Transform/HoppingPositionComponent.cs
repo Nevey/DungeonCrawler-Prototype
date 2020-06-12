@@ -1,8 +1,8 @@
 using System;
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using DG.Tweening;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class HoppingPositionComponent : PositionComponent
     {

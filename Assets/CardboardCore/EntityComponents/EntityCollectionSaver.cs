@@ -4,7 +4,7 @@ using CardboardCore.DI;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     [Injectable]
     public class EntityCollectionSaver

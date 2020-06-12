@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CardboardCore.DI;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     [Injectable(Singleton = true)]
     public class EntityRegister

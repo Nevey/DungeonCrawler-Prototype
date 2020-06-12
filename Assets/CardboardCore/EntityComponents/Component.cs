@@ -1,6 +1,6 @@
 using CardboardCore.DI;
 
-namespace CardboardCore.EntityComponents
+namespace CardboardCore.EC
 {
     public abstract class Component
     {

@@ -1,8 +1,8 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 using CardboardCore.Utilities;
 using DG.Tweening;
 
-namespace DungeonCrawler.EntityComponents.Components
+namespace DungeonCrawler.EC.Components
 {
     public class CardViewComponent : ViewComponent
     {

@@ -1,6 +1,6 @@
-using CardboardCore.EntityComponents;
+using CardboardCore.EC;
 
-namespace DungeonCrawler.EntityComponents
+namespace DungeonCrawler.EC
 {
     public class GameplayEntityFactory : EntityFactory<GameplayEntityLoadData>
     {
