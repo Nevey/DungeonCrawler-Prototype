@@ -78,7 +78,7 @@ namespace DungeonCrawler.EntityComponents.Components
             spawnOffset.x += spawnDirection.x * corridorLength;
             spawnOffset.z += spawnDirection.y * corridorLength;
 
-            SetRoomEntityPosition(roomData, (int)spawnOffset.x, (int)spawnOffset.z);
+            SetRoomEntityPosition(roomData, spawnLocation.x, spawnLocation.y);
         }
     }
 }

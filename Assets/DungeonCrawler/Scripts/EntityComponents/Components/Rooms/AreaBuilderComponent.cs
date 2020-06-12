@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using CardboardCore.EntityComponents;
 using DungeonCrawler.Levels;
 
@@ -13,13 +12,16 @@ namespace DungeonCrawler.EntityComponents.Components
         protected int currentTileviewsLoaded;
 
         private RoomRegistryComponent roomRegistryComponent;
+        private TileRegistryComponent tileRegistryComponent;
 
         public event Action<RoomDataComponent> AreaBuildingFinishedEvent;
 
         protected override void OnStart()
         {
             gameplayEntityFactory = new GameplayEntityFactory();
+
             roomRegistryComponent = GetComponent<RoomRegistryComponent>();
+            tileRegistryComponent = GetComponent<TileRegistryComponent>();
         }
 
         protected void CreateRoomBase(RoomData roomData, UnityEngine.Vector3 position)
@@ -30,7 +32,7 @@ namespace DungeonCrawler.EntityComponents.Components
             currentlyBuildingRoom = roomEntity.GetComponent<RoomDataComponent>();
             currentlyBuildingRoom.SetRoomData(roomData);
 
-            roomRegistryComponent.AddRoom(currentlyBuildingRoom);
+            roomRegistryComponent.Add(currentlyBuildingRoom);
 
             // Find amount of tile views we need to load
             SetupTotalTileViewsToLoad();
@@ -41,7 +43,9 @@ namespace DungeonCrawler.EntityComponents.Components
             Entity tileEntity = gameplayEntityFactory.Instantiate("TileEntity");
 
             TileDataComponent tileDataComponent = tileEntity.GetComponent<TileDataComponent>();
-            tileDataComponent.SetData(currentlyBuildingRoom.roomData, tileData);
+            tileDataComponent.SetData(currentlyBuildingRoom, tileData);
+
+            tileRegistryComponent.Add(tileDataComponent);
 
             tileEntity.GetComponent<GridPositionComponent>().SetPosition(tileData.x, tileData.y);
             tileEntity.GetComponent<PositionComponent>().SetPosition(tileData.x, 0f, tileData.y);
@@ -60,6 +64,7 @@ namespace DungeonCrawler.EntityComponents.Components
             PositionComponent positionComponent = currentlyBuildingRoom.GetComponent<PositionComponent>();
             float positionX = x + roomData.gridSizeX / 2f;
             float positionZ = y + roomData.gridSizeY / 2f;
+
             positionComponent.SetPosition(positionX, 0f, positionZ);
         }
 

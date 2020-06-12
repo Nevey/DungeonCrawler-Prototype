@@ -12,7 +12,7 @@ namespace DungeonCrawler.EntityComponents.Components
             rooms = new List<RoomDataComponent>();
         }
 
-        public void AddRoom(RoomDataComponent roomDataComponent)
+        public void Add(RoomDataComponent roomDataComponent)
         {
             rooms.Add(roomDataComponent);
         }

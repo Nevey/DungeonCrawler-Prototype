@@ -6,6 +6,12 @@ namespace DungeonCrawler.EntityComponents.Components
 {
     public class RoomAwarenessComponent : Component
     {
+        private Entity cameraEntity;
+        private CameraTargetComponent cameraTargetComponent;
+
+        private Entity levelEntity;
+        private TileRegistryComponent tileRegistryComponent;
+
         private GridPositionComponent gridPositionComponent;
 
         public RoomDataComponent currentRoom { get; private set; }
@@ -13,6 +19,15 @@ namespace DungeonCrawler.EntityComponents.Components
         protected override void OnStart()
         {
             gridPositionComponent = GetComponent<GridPositionComponent>();
+        }
+
+        public void Setup(Entity cameraEntity, Entity levelEntity)
+        {
+            this.cameraEntity = cameraEntity;
+            cameraTargetComponent = cameraEntity.GetComponent<CameraTargetComponent>();
+
+            this.levelEntity = levelEntity;
+            tileRegistryComponent = levelEntity.GetComponent<TileRegistryComponent>();
         }
 
         public void EnterRoom(RoomDataComponent currentRoom)
@@ -38,15 +53,29 @@ namespace DungeonCrawler.EntityComponents.Components
 
             RoomData roomData = currentRoom.roomData;
 
-            if (targetX < 0 || targetX >= roomData.gridSizeX)
+            if (targetX < 0 || targetX >= roomData.gridSizeX
+                || targetY < 0 || targetY >= roomData.gridSizeY)
             {
-                // get current room index from 
-                return false;
-            }
+                // TODO: If the amount of tiles gets too large, start using rooms to create a smaller search area
+                // Get tile component with target x and y from tile registry
+                int localTargetX = targetX + currentRoom.offsetX;
+                int locatTargetY = targetY + currentRoom.offsetY;
+                TileDataComponent tileDataComponent = tileRegistryComponent.GetTile(localTargetX, locatTargetY);
 
-            if (targetY < 0 || targetY >= roomData.gridSizeY)
-            {
-                return false;
+                if (tileDataComponent == null)
+                {
+                    return false;
+                }
+
+                bool isAccessible = IsTargetTileAccessible(tileDataComponent.tileData);
+
+                if (isAccessible)
+                {
+                    EnterRoom(tileDataComponent.parentRoom);
+                    cameraTargetComponent.SetTarget(tileDataComponent.parentRoom.owner);
+                }
+
+                return isAccessible;
             }
 
             TileData targetTileData = roomData.tiles[targetX, targetY];
