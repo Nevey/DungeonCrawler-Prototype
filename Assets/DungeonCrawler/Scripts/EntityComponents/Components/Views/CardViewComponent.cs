@@ -64,8 +64,13 @@ namespace DungeonCrawler.EntityComponents.Components
         {
             PositionComponent targetPositionComponent = targetEntity.GetComponent<PositionComponent>();
 
+            UnityEngine.Vector3 hoverPosition = targetPositionComponent.position;
+            hoverPosition.y += 2f;
+
             Sequence sequence = DOTween.Sequence();
-            sequence.Append(positionComponent.SetPositionAnimated(targetPositionComponent.position, 2f));
+            sequence.Append(rotationComponent.SetRotationAnimated(-90f, 0f, 0f));
+            sequence.Insert(0f, positionComponent.SetPositionAnimated(hoverPosition, 2f));
+            sequence.Append(positionComponent.SetPositionAnimated(targetPositionComponent.position, 0.5f, Ease.InBack));
             sequence.OnComplete(callback);
             sequence.Play();
         }

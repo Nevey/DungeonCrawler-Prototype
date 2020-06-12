@@ -36,5 +36,11 @@ namespace CardboardCore.EntityComponents
 
             return entity;
         }
+
+        public void Destroy(Entity entity)
+        {
+            updateLoop.UnregisterGameLoopable(entity);
+            entity = null;
+        }
     }
 }

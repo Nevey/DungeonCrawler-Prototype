@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Timers;
 using CardboardCore.DI;
-using CardboardCore.Utilities;
 using UnityEngine;
 
 namespace CardboardCore.Loop

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CardboardCore.EntityComponents;
 using DungeonCrawler.Levels;
@@ -196,7 +197,14 @@ namespace DungeonCrawler.EntityComponents.Components
 
         public void AddRoomCard(RoomCardDataComponent roomCardDataComponent)
         {
+            roomCardDataComponent.StoppedEvent += OnRoomCardDataComponentStopped;
             roomCardDataComponents.Add(roomCardDataComponent);
+        }
+
+        private void OnRoomCardDataComponentStopped(CardDataComponent obj)
+        {
+            obj.StoppedEvent -= OnRoomCardDataComponentStopped;
+            roomCardDataComponents.Remove((RoomCardDataComponent)obj);
         }
     }
 }

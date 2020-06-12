@@ -12,14 +12,14 @@ namespace DungeonCrawler.EntityComponents.Components
         protected int totalTileViewsToLoad;
         protected int currentTileviewsLoaded;
 
-        public List<RoomDataComponent> rooms { get; private set; }
+        private RoomRegistryComponent roomRegistryComponent;
 
         public event Action<RoomDataComponent> AreaBuildingFinishedEvent;
 
         protected override void OnStart()
         {
             gameplayEntityFactory = new GameplayEntityFactory();
-            rooms = new List<RoomDataComponent>();
+            roomRegistryComponent = GetComponent<RoomRegistryComponent>();
         }
 
         protected void CreateRoomBase(RoomData roomData, UnityEngine.Vector3 position)
@@ -30,11 +30,10 @@ namespace DungeonCrawler.EntityComponents.Components
             currentlyBuildingRoom = roomEntity.GetComponent<RoomDataComponent>();
             currentlyBuildingRoom.SetRoomData(roomData);
 
+            roomRegistryComponent.AddRoom(currentlyBuildingRoom);
+
             // Find amount of tile views we need to load
             SetupTotalTileViewsToLoad();
-
-            // Add current room data component to rooms list for future access
-            rooms.Add(currentlyBuildingRoom);
         }
 
         protected TileDataComponent CreateTile(TileData tileData)

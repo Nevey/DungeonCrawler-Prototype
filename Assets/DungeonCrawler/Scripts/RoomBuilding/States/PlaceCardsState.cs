@@ -20,11 +20,11 @@ namespace DungeonCrawler.RoomBuilding.States
         {
             gameplayEntityFactory = new GameplayEntityFactory();
 
-            // Get room builder component from level entity
-            RoomBuilderComponent roomBuilderComponent = entityRegister.FindEntity("LevelEntity").GetComponent<RoomBuilderComponent>();
+            // Get room registry component from level entity
+            RoomRegistryComponent roomRegistryComponent = entityRegister.FindEntity("LevelEntity").GetComponent<RoomRegistryComponent>();
 
             // Get last indexed room data, this is the room that was most recently created by the room builder
-            RoomDataComponent roomDataComponent = roomBuilderComponent.rooms[roomBuilderComponent.rooms.Count - 1];
+            RoomDataComponent roomDataComponent = roomRegistryComponent.rooms[roomRegistryComponent.rooms.Count - 1];
 
             // Find all doorway tiles
             TileDataComponent[] doorwayTiles = roomDataComponent.GetTiles(TileState.Doorway);

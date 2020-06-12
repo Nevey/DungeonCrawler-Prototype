@@ -1,5 +1,6 @@
 ﻿using CardboardCore.DI;
 using CardboardCore.EntityComponents;
+using DungeonCrawler.EntityComponents;
 using DungeonCrawler.EntityComponents.Components;
 using UnityEngine;
 
@@ -54,6 +55,7 @@ namespace DungeonCrawler.RoomBuilding.States
 
         private void PlayRoomBuildAnimation()
         {
+            new GameplayEntityFactory().Destroy(roomCardDataComponent.owner);
             roomBuilderComponent.PlayRoomBuildAnimation(owner.ToNextState);
         }
     }

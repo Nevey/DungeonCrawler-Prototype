@@ -87,7 +87,7 @@ namespace DungeonCrawler.EntityComponents.Components
             return SetRotationAnimated(targetEuler, duration, ease);
         }
 
-        public Tween SetRotationAnimated(int x, int y, int z, float duration = 1f, Ease ease = Ease.InOutQuad)
+        public Tween SetRotationAnimated(float x, float y, float z, float duration = 1f, Ease ease = Ease.InOutQuad)
         {
             UnityEngine.Vector3 targetEuler = new UnityEngine.Vector3(x, y, z);
             return SetRotationAnimated(targetEuler, duration, ease);

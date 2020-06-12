@@ -8,8 +8,6 @@ namespace DungeonCrawler.RoomBuilding.States
 {
     public class SpawnCameraState : State
     {
-        [Inject] private EntityRegister entityRegister;
-
         private CameraViewComponent cameraViewComponent;
 
         protected override void OnEnter()

@@ -14,8 +14,9 @@ namespace DungeonCrawler.RoomBuilding.States
 
         protected override void OnEnter()
         {
-            RoomBuilderComponent roomBuilderComponent = entityRegister.FindEntity("LevelEntity").GetComponent<RoomBuilderComponent>();
-            RoomDataComponent roomDataComponent = roomBuilderComponent.rooms[0];
+            Entity levelEntity = entityRegister.FindEntity("LevelEntity");
+            RoomRegistryComponent roomRegistryComponent = levelEntity.GetComponent<RoomRegistryComponent>();
+            RoomDataComponent roomDataComponent = roomRegistryComponent.rooms[0];
 
             // TODO: Listen to spawns from other players, and let other players know we've spawned our player
             // OR

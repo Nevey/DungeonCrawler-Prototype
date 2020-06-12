@@ -40,6 +40,7 @@ namespace DungeonCrawler.EntityComponents.Components
 
             if (targetX < 0 || targetX >= roomData.gridSizeX)
             {
+                // get current room index from 
                 return false;
             }
 
@@ -51,8 +52,6 @@ namespace DungeonCrawler.EntityComponents.Components
             TileData targetTileData = roomData.tiles[targetX, targetY];
 
             return IsTargetTileAccessible(targetTileData);
-
-            // TODO: Check with multiple room support
         }
 
         public bool IsTargetTileAccessible(TileData targetTileData)
